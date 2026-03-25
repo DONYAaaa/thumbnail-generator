@@ -1,0 +1,1181 @@
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./youtube.js"></script>
+
+<style>
+  .tg-widget {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    max-width: 900px;
+    min-height: 560px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    color: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .tg-widget *, .tg-widget *::before, .tg-widget *::after {
+    box-sizing: border-box;
+  }
+
+  /* ── Header ── */
+
+  .tg-header {
+    padding: 22px 28px;
+    border-bottom: 1px solid #e8e8f0;
+  }
+
+  .tg-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 3px;
+    color: #1a1a2e;
+  }
+
+  .tg-subtitle {
+    font-size: 13px;
+    color: #8888a0;
+    margin: 0;
+  }
+
+  /* ── Two-column body ── */
+
+  .tg-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .tg-left {
+    width: 380px;
+    flex-shrink: 0;
+    padding: 28px;
+    border-right: 1px solid #e8e8f0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tg-right {
+    flex: 1;
+    padding: 28px;
+    background: #f9f9fb;
+    display: flex;
+    position: relative;
+  }
+
+  /* ── Sections ── */
+
+  .tg-section { margin-bottom: 20px; }
+
+  .tg-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+  }
+
+  .tg-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: #8888a0;
+    background: #f0f0f8;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: 1px;
+  }
+
+  /* ── Inputs ── */
+
+  .tg-input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1a1a2e;
+    background: #ffffff;
+    border: 1px solid #e8e8f0;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .tg-input:focus {
+    border-color: rgb(77, 58, 251);
+    box-shadow: 0 0 0 3px rgba(77, 58, 251, 0.08);
+  }
+
+  .tg-input::placeholder { color: #b0b0c0; }
+
+  /* ── URL input group ── */
+
+  .tg-url-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e8e8f0;
+    border-radius: 10px;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .tg-url-group:focus-within {
+    border-color: rgb(77, 58, 251);
+    box-shadow: 0 0 0 3px rgba(77, 58, 251, 0.08);
+  }
+
+  .tg-url-icon {
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    flex-shrink: 0;
+  }
+
+  .tg-url-group .tg-input {
+    border: none;
+    border-radius: 0;
+    padding: 10px 8px;
+    min-width: 0;
+  }
+
+  .tg-url-group .tg-input:focus { box-shadow: none; }
+
+  .tg-url-go {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgb(77, 58, 251);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin: 3px;
+    position: relative;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .tg-url-go:hover { opacity: 0.88; }
+  .tg-url-go:active { transform: scale(0.93); }
+
+  .tg-url-go:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .tg-url-go svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .tg-url-go:disabled svg { visibility: hidden; }
+
+  .tg-url-go:disabled::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: tg-spin 0.6s linear infinite;
+  }
+
+  /* ── Video card (left column) ── */
+
+  .tg-video-card {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #f0f0f8;
+    border-radius: 8px;
+    margin-top: 10px;
+    animation: tg-fadeIn 0.3s ease;
+  }
+
+  .tg-widget:has(#tgStep2.active) .tg-video-card,
+  .tg-widget:has(#tgGenerating.active) .tg-video-card,
+  .tg-widget:has(#tgStep3.active) .tg-video-card {
+    display: flex;
+  }
+
+  .tg-video-card img {
+    width: 40px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .tg-video-card-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .tg-video-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a2e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tg-video-card-author {
+    font-size: 11px;
+    color: #8888a0;
+    margin-top: 1px;
+  }
+
+  .tg-video-card-change {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid #d0d0e0;
+    border-radius: 50%;
+    color: #8888a0;
+    font-size: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .tg-video-card-change:hover {
+    background: #e0e0f0;
+    color: #1a1a2e;
+  }
+
+  /* ── Dropzone ── */
+
+  .tg-dropzone {
+    border: 2px dashed #d0d0e8;
+    border-radius: 10px;
+    background: #f8f8ff;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .tg-dropzone:hover, .tg-dropzone.dragover {
+    border-color: rgb(77, 58, 251);
+    background: rgba(77, 58, 251, 0.04);
+  }
+
+  .tg-dropzone-icon { line-height: 1; }
+
+  .tg-dropzone-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: #9898b8;
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .tg-dropzone-text {
+    font-size: 13px;
+    color: #8888a0;
+  }
+
+  /* ── Photo preview ── */
+
+  .tg-photo-preview {
+    position: relative;
+    display: none;
+  }
+
+  .tg-photo-preview.has-photo { display: block; }
+
+  .tg-photo-preview img {
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e8e8f0;
+  }
+
+  .tg-photo-remove {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: background 0.2s;
+  }
+
+  .tg-photo-remove:hover { background: rgba(220, 38, 38, 0.8); }
+
+  /* ── Generate button ── */
+
+  .tg-generate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 48px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #fff;
+    background: rgb(77, 58, 251);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    margin-top: 4px;
+  }
+
+  .tg-generate-btn:hover {
+    opacity: 0.93;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(77, 58, 251, 0.28);
+  }
+
+  .tg-generate-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .tg-widget:has(#tgStep1.active) .tg-generate-btn,
+  .tg-widget:has(#tgLoading.active) .tg-generate-btn,
+  .tg-widget:has(#tgGenerating.active) .tg-generate-btn {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ── Error box ── */
+
+  .tg-error-box {
+    display: none;
+    padding: 12px 14px;
+    background: #fff0f0;
+    border: 1px solid #ffcccc;
+    border-radius: 8px;
+    margin-top: 12px;
+  }
+
+  .tg-error-box.show { display: block; animation: tg-fadeIn 0.25s ease; }
+
+  .tg-error-text {
+    font-size: 13px;
+    color: #dc2626;
+    margin: 0 0 10px;
+  }
+
+  .tg-error-text::before {
+    content: '\26A0\FE0F  ';
+  }
+
+  .tg-error-retry {
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #dc2626;
+    background: none;
+    border: 1px solid #ffcccc;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .tg-error-retry:hover { background: rgba(220, 38, 38, 0.06); }
+
+  /* ══════════════════════════════════
+     RIGHT COLUMN — preview states
+     ══════════════════════════════════ */
+
+  .tg-step {
+    display: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    width: 100%;
+  }
+
+  .tg-step.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .tg-step.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Placeholder (idle & ready) ── */
+
+  .tg-preview-box {
+    width: 100%;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .tg-preview-box::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%;
+  }
+
+  .tg-preview-idle {
+    background: linear-gradient(135deg, #f0f0f8, #e8e8f4);
+    border: 2px dashed #d8d8ec;
+  }
+
+  .tg-preview-ready-box {
+    background: linear-gradient(135deg, #eee8ff, #e4e0ff);
+    border: 2px dashed #c4b8f0;
+  }
+
+  .tg-preview-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px;
+  }
+
+  .tg-preview-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 4px;
+  }
+
+  .tg-preview-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: #b0b0c8;
+    margin: 0;
+    text-align: center;
+  }
+
+  .tg-preview-hint {
+    font-size: 13px;
+    color: #c8c8d8;
+    margin: 0;
+    text-align: center;
+  }
+
+  .tg-preview-ready-box .tg-preview-text { color: #7c6dc8; }
+  .tg-preview-ready-box .tg-preview-hint { color: #a098d0; }
+
+  /* ── Shimmer (loading / generating) ── */
+
+  .tg-shimmer-box {
+    width: 100%;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ece8f8, #e0ddf4);
+  }
+
+  .tg-shimmer-box::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%;
+  }
+
+  .tg-shimmer-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(77, 58, 251, 0.1) 45%,
+      rgba(77, 58, 251, 0.06) 55%,
+      transparent 100%
+    );
+    animation: tg-shimmer 1.6s ease-in-out infinite;
+  }
+
+  .tg-shimmer-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    z-index: 1;
+  }
+
+  .tg-shimmer-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #dcd4f0;
+    border-top-color: rgb(77, 58, 251);
+    border-radius: 50%;
+    animation: tg-spin 0.7s linear infinite;
+  }
+
+  .tg-loader-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #7c6dc8;
+  }
+
+  /* ── Result ── */
+
+  #tgStep3.active { justify-content: center; }
+
+  .tg-result-wrap { width: 100%; }
+
+  .tg-result-img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(77, 58, 251, 0.15);
+    margin-bottom: 16px;
+  }
+
+  .tg-result-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .tg-result-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    color: #1a1a2e;
+    background: #fff;
+    border: 1px solid #e8e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .tg-result-btn:hover {
+    background: #f0f0f8;
+    border-color: #d0d0e8;
+  }
+
+  .tg-start-over {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    color: #8888a0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: color 0.2s;
+  }
+
+  .tg-start-over:hover { color: #1a1a2e; }
+
+  /* ── Toast ── */
+
+  .tg-copy-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1a1a2e;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 9999;
+  }
+
+  .tg-copy-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── Animations ── */
+
+  @keyframes tg-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes tg-shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes tg-fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Mobile ── */
+
+  @media (max-width: 768px) {
+    .tg-widget {
+      max-width: 100%;
+      min-height: auto;
+      border-radius: 12px;
+    }
+    .tg-body {
+      flex-direction: column;
+    }
+    .tg-left {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #e8e8f0;
+    }
+    .tg-right {
+      min-height: 280px;
+    }
+    .tg-header { padding: 18px 20px; }
+    .tg-left, .tg-right { padding: 20px; }
+    .tg-result-actions { flex-wrap: wrap; }
+  }
+</style>
+
+<div class="tg-widget" id="tgWidget">
+
+  <div class="tg-header">
+    <h2 class="tg-title">AI YouTube Thumbnail Generator</h2>
+    <p class="tg-subtitle">Paste a video link, upload your photo and get a ready thumbnail</p>
+  </div>
+
+  <div class="tg-body">
+
+    <!-- ─── LEFT COLUMN: inputs ─── -->
+    <div class="tg-left">
+
+      <div class="tg-section">
+        <label class="tg-label">YouTube URL</label>
+        <div class="tg-url-group">
+          <div class="tg-url-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.5 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+          </div>
+          <input class="tg-input" id="tgUrlInput" type="url"
+                 placeholder="https://youtube.com/watch?v=..." autocomplete="off">
+          <button class="tg-url-go" id="tgAnalyzeBtn">
+            <span id="tgAnalyzeBtnLabel"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </button>
+        </div>
+
+        <div class="tg-video-card" id="tgVideoCard2">
+          <img id="tgVideoThumb2" src="" alt="">
+          <div class="tg-video-card-info">
+            <div class="tg-video-card-title" id="tgVideoTitle2"></div>
+            <div class="tg-video-card-author" id="tgVideoAuthor2"></div>
+          </div>
+          <button class="tg-video-card-change" id="tgBackToStep1" title="Change video">&times;</button>
+        </div>
+
+        <div class="tg-error-box" id="tgStep1Error">
+          <div class="tg-error-text" id="tgStep1ErrorText"></div>
+          <button class="tg-error-retry" id="tgStep1Retry">Try again</button>
+        </div>
+      </div>
+
+      <div class="tg-section">
+        <label class="tg-label">Your photo <span class="tg-badge">optional</span></label>
+        <div class="tg-dropzone" id="tgDropzone">
+          <div class="tg-dropzone-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="tg-dropzone-text">Click or drag photo here</div>
+        </div>
+        <input type="file" id="tgFileInput" accept="image/*" hidden>
+        <div class="tg-photo-preview" id="tgPhotoPreview">
+          <img id="tgPhotoImg" src="" alt="">
+          <button class="tg-photo-remove" id="tgPhotoRemove" title="Remove">&times;</button>
+        </div>
+      </div>
+
+      <div class="tg-section">
+        <label class="tg-label">Thumbnail text</label>
+        <input class="tg-input" id="tgCustomText" type="text"
+               placeholder="Leave empty to auto-generate">
+      </div>
+
+      <button class="tg-generate-btn" id="tgGenerateBtn">
+        <span>&#10024;</span> Generate Thumbnail
+      </button>
+
+      <div class="tg-error-box" id="tgStep2Error">
+        <div class="tg-error-text" id="tgStep2ErrorText"></div>
+        <button class="tg-error-retry" id="tgStep2Retry">Try again</button>
+      </div>
+    </div>
+
+    <!-- ─── RIGHT COLUMN: preview / result ─── -->
+    <div class="tg-right">
+
+      <!-- Idle -->
+      <div class="tg-step active" id="tgStep1">
+        <div class="tg-preview-box tg-preview-idle">
+          <div class="tg-preview-inner">
+            <svg class="tg-preview-icon" viewBox="0 0 56 56" fill="none">
+              <path d="M28 6l4 12 12 4-12 4-4 12-4-12L12 22l12-4 4-12z" stroke="#d0d0e8" stroke-width="1.8" fill="#e8e8f4"/>
+              <path d="M44 24l2.5 7 7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5 2.5-7z" stroke="#d8d8ec" stroke-width="1.4" fill="#ededf6"/>
+              <path d="M14 34l2 5.5 5.5 2-5.5 2-2 5.5-2-5.5L6 38l5.5-2 2-5.5z" stroke="#d8d8ec" stroke-width="1.4" fill="#ededf6"/>
+            </svg>
+            <p class="tg-preview-text">Your thumbnail will appear here</p>
+            <p class="tg-preview-hint">Fill in the fields on the left and click Generate</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analyzing video -->
+      <div class="tg-step" id="tgLoading">
+        <div class="tg-shimmer-box">
+          <div class="tg-shimmer-inner">
+            <div class="tg-shimmer-spinner"></div>
+            <div class="tg-loader-text">Analyzing video&hellip;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ready to generate -->
+      <div class="tg-step" id="tgStep2">
+        <div class="tg-preview-box tg-preview-ready-box">
+          <div class="tg-preview-inner">
+            <svg class="tg-preview-icon" viewBox="0 0 56 56" fill="none">
+              <path d="M28 6l4 12 12 4-12 4-4 12-4-12L12 22l12-4 4-12z" stroke="#b8a8f0" stroke-width="1.8" fill="#ddd4f8"/>
+              <path d="M44 24l2.5 7 7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5 2.5-7z" stroke="#c4b8f0" stroke-width="1.4" fill="#e4ddf8"/>
+              <path d="M14 34l2 5.5 5.5 2-5.5 2-2 5.5-2-5.5L6 38l5.5-2 2-5.5z" stroke="#c4b8f0" stroke-width="1.4" fill="#e4ddf8"/>
+            </svg>
+            <p class="tg-preview-text">Ready to generate</p>
+            <p class="tg-preview-hint">Click &ldquo;&#10024; Generate Thumbnail&rdquo; to create your AI thumbnail</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generating -->
+      <div class="tg-step" id="tgGenerating">
+        <div class="tg-shimmer-box">
+          <div class="tg-shimmer-inner">
+            <div class="tg-shimmer-spinner"></div>
+            <div class="tg-loader-text">Generating thumbnail&hellip;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="tg-step" id="tgStep3">
+        <div class="tg-result-wrap">
+          <img class="tg-result-img" id="tgResultImg" src="" alt="Generated thumbnail">
+          <div class="tg-result-actions">
+            <button class="tg-result-btn" id="tgDownloadBtn">&#11015; Download</button>
+            <button class="tg-result-btn" id="tgCopyLinkBtn">&#128279; Copy link</button>
+            <button class="tg-result-btn" id="tgRegenerateBtn">&#128260; Generate again</button>
+          </div>
+          <button class="tg-start-over" id="tgStartOverBtn">&larr; Start over</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tg-copy-toast" id="tgToast"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const CONFIG = {
+    workerUrl: "http://localhost:8787",
+  };
+
+  var state = {
+    step: "idle",
+    videoData: null,
+    userPhoto: null,
+    customText: "",
+    resultUrl: null,
+    error: null
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  var els = {
+    step1:        $("tgStep1"),
+    step2:        $("tgStep2"),
+    step3:        $("tgStep3"),
+    loading:      $("tgLoading"),
+    generating:   $("tgGenerating"),
+    urlInput:     $("tgUrlInput"),
+    analyzeBtn:   $("tgAnalyzeBtn"),
+    analyzeLbl:   $("tgAnalyzeBtnLabel"),
+    step1Error:   $("tgStep1Error"),
+    step1ErrTxt:  $("tgStep1ErrorText"),
+    step1Retry:   $("tgStep1Retry"),
+    videoThumb2:  $("tgVideoThumb2"),
+    videoTitle2:  $("tgVideoTitle2"),
+    videoAuthor2: $("tgVideoAuthor2"),
+    dropzone:     $("tgDropzone"),
+    fileInput:    $("tgFileInput"),
+    photoPreview: $("tgPhotoPreview"),
+    photoImg:     $("tgPhotoImg"),
+    photoRemove:  $("tgPhotoRemove"),
+    customText:   $("tgCustomText"),
+    generateBtn:  $("tgGenerateBtn"),
+    backToStep1:  $("tgBackToStep1"),
+    step2Error:   $("tgStep2Error"),
+    step2ErrTxt:  $("tgStep2ErrorText"),
+    step2Retry:   $("tgStep2Retry"),
+    resultImg:    $("tgResultImg"),
+    downloadBtn:  $("tgDownloadBtn"),
+    copyLinkBtn:  $("tgCopyLinkBtn"),
+    regenerateBtn:$("tgRegenerateBtn"),
+    startOverBtn: $("tgStartOverBtn"),
+    toast:        $("tgToast")
+  };
+
+  var allSteps = [els.step1, els.step2, els.step3, els.loading, els.generating];
+
+  function showStep(el) {
+    allSteps.forEach(function (s) {
+      s.classList.remove("active", "visible");
+    });
+    el.classList.add("active");
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        el.classList.add("visible");
+      });
+    });
+  }
+
+  function showError(box, txtEl, message) {
+    txtEl.textContent = message;
+    box.classList.add("show");
+  }
+
+  function hideError(box) {
+    box.classList.remove("show");
+  }
+
+  function toast(msg) {
+    els.toast.textContent = msg;
+    els.toast.classList.add("show");
+    setTimeout(function () { els.toast.classList.remove("show"); }, 2200);
+  }
+
+  function fillVideoCard(data) {
+    els.videoThumb2.src = data.thumbnail_url;
+    els.videoTitle2.textContent = data.title;
+    els.videoAuthor2.textContent = data.author;
+  }
+
+  function convertToBase64(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function () { resolve(reader.result); };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function handlePhoto(file) {
+    if (!file || !file.type.startsWith("image/")) return;
+    state.userPhoto = file;
+    els.photoImg.src = URL.createObjectURL(file);
+    els.photoPreview.classList.add("has-photo");
+    els.dropzone.style.display = "none";
+  }
+
+  function removePhoto() {
+    state.userPhoto = null;
+    els.photoImg.src = "";
+    els.photoPreview.classList.remove("has-photo");
+    els.dropzone.style.display = "";
+    els.fileInput.value = "";
+  }
+
+  /* ─── Step 1: Analyze ─── */
+
+  async function analyzeVideo() {
+    var url = els.urlInput.value.trim();
+    if (!url) {
+      showError(els.step1Error, els.step1ErrTxt, "Please paste a YouTube URL.");
+      return;
+    }
+
+    hideError(els.step1Error);
+    state.step = "loading_video";
+    els.analyzeBtn.disabled = true;
+    showStep(els.loading);
+
+    try {
+      var data = await window.YouTubeParser.fetchVideoData(url);
+      state.videoData = data;
+      state.step = "ready";
+      fillVideoCard(data);
+      showStep(els.step2);
+    } catch (err) {
+      state.step = "error";
+      state.error = err.message || "Could not load video data.";
+      showStep(els.step1);
+      showError(els.step1Error, els.step1ErrTxt, state.error);
+    } finally {
+      els.analyzeBtn.disabled = false;
+    }
+  }
+
+  /* ─── Step 2: Generate ─── */
+
+  var generatingMessages = [
+    "Analyzing video context...",
+    "Composing the scene...",
+    "Adding finishing touches..."
+  ];
+  var generatingMsgInterval = null;
+
+  function startGeneratingMessages() {
+    var textEl = els.generating.querySelector(".tg-loader-text");
+    textEl.textContent = "Generating your thumbnail...";
+
+    var statusEl = els.generating.querySelector(".tg-loader-status");
+    if (!statusEl) {
+      statusEl = document.createElement("div");
+      statusEl.className = "tg-loader-text tg-loader-status";
+      statusEl.style.marginTop = "8px";
+      statusEl.style.fontSize = "12px";
+      textEl.parentNode.appendChild(statusEl);
+    }
+
+    var msgIndex = 0;
+    statusEl.textContent = generatingMessages[0];
+
+    generatingMsgInterval = setInterval(function () {
+      msgIndex = (msgIndex + 1) % generatingMessages.length;
+      statusEl.textContent = generatingMessages[msgIndex];
+    }, 3000);
+  }
+
+  function stopGeneratingMessages() {
+    if (generatingMsgInterval) {
+      clearInterval(generatingMsgInterval);
+      generatingMsgInterval = null;
+    }
+  }
+
+  async function generateThumbnail() {
+    hideError(els.step2Error);
+    state.customText = els.customText.value.trim();
+    state.step = "generating";
+    showStep(els.generating);
+    startGeneratingMessages();
+
+    try {
+      var imageBase64 = null;
+      if (state.userPhoto) {
+        imageBase64 = await convertToBase64(state.userPhoto);
+      }
+
+      var body = {
+        image_url: imageBase64,
+        video_title: state.videoData.title,
+        video_description: state.videoData.description || "",
+        custom_text: state.customText || ""
+      };
+
+      var res = await fetch(CONFIG.workerUrl + "/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      var json = await res.json();
+
+      if (json.error) {
+        state.error = json.error + (json.details ? ": " + json.details : "");
+        state.step = "error";
+        stopGeneratingMessages();
+        showStep(els.step2);
+        showError(els.step2Error, els.step2ErrTxt, state.error);
+        return;
+      }
+
+      if (json.image_url) {
+        state.resultUrl = json.image_url;
+        state.step = "result";
+        stopGeneratingMessages();
+        els.resultImg.src = state.resultUrl;
+        showStep(els.step3);
+      }
+    } catch (err) {
+      state.step = "error";
+      state.error = "Connection error. Is the worker running?";
+      stopGeneratingMessages();
+      showStep(els.step2);
+      showError(els.step2Error, els.step2ErrTxt, state.error);
+    }
+  }
+
+  /* ─── Step 3 actions ─── */
+
+  async function downloadImage(url) {
+    var blob = await fetch(url).then(function (r) { return r.blob(); });
+    var objectUrl = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = "thumbnail.jpg";
+    a.click();
+    URL.revokeObjectURL(objectUrl);
+  }
+
+  function downloadResult() {
+    if (!state.resultUrl) return;
+    downloadImage(state.resultUrl);
+  }
+
+  function copyLink() {
+    if (!state.resultUrl) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(state.resultUrl).then(function () {
+        toast("Link copied!");
+      });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = state.resultUrl;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      toast("Link copied!");
+    }
+  }
+
+  function startOver() {
+    state = {
+      step: "idle",
+      videoData: null,
+      userPhoto: null,
+      customText: "",
+      resultUrl: null,
+      error: null
+    };
+    els.urlInput.value = "";
+    els.customText.value = "";
+    removePhoto();
+    hideError(els.step1Error);
+    hideError(els.step2Error);
+    showStep(els.step1);
+  }
+
+  /* ─── Event listeners ─── */
+
+  els.analyzeBtn.addEventListener("click", analyzeVideo);
+
+  els.urlInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") analyzeVideo();
+  });
+
+  els.step1Retry.addEventListener("click", function () {
+    hideError(els.step1Error);
+  });
+
+  els.backToStep1.addEventListener("click", function () {
+    state.step = "idle";
+    showStep(els.step1);
+  });
+
+  els.dropzone.addEventListener("click", function () {
+    els.fileInput.click();
+  });
+
+  els.fileInput.addEventListener("change", function () {
+    if (this.files && this.files[0]) handlePhoto(this.files[0]);
+  });
+
+  els.dropzone.addEventListener("dragover", function (e) {
+    e.preventDefault();
+    this.classList.add("dragover");
+  });
+
+  els.dropzone.addEventListener("dragleave", function () {
+    this.classList.remove("dragover");
+  });
+
+  els.dropzone.addEventListener("drop", function (e) {
+    e.preventDefault();
+    this.classList.remove("dragover");
+    var files = e.dataTransfer && e.dataTransfer.files;
+    if (files && files[0]) handlePhoto(files[0]);
+  });
+
+  els.photoRemove.addEventListener("click", removePhoto);
+
+  els.generateBtn.addEventListener("click", generateThumbnail);
+
+  els.step2Retry.addEventListener("click", function () {
+    hideError(els.step2Error);
+  });
+
+  els.downloadBtn.addEventListener("click", downloadResult);
+  els.copyLinkBtn.addEventListener("click", copyLink);
+
+  els.regenerateBtn.addEventListener("click", function () {
+    state.step = "ready";
+    showStep(els.step2);
+  });
+
+  els.startOverBtn.addEventListener("click", startOver);
+
+  /* ─── Init ─── */
+  showStep(els.step1);
+
+})();
+</script>
