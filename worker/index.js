@@ -24,12 +24,22 @@ export default {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
     }
     const { pathname } = new URL(request.url);
+    if (pathname === '/config' && request.method === 'GET') return handleConfig(request, env);
     if (pathname === '/analyze' && request.method === 'POST') return handleAnalyze(request);
     if (pathname === '/generate' && request.method === 'POST') return handleGenerate(request, env);
     if (pathname === '/upload' && request.method === 'POST') return handleUpload(request, env);
+    if (env.ASSETS) return env.ASSETS.fetch(request);
     return json({ error: 'Not found' }, 404);
   },
 };
+
+/** Public bootstrap for the widget: base URL for API calls (from WIDGET_PUBLIC_URL or request origin). */
+function handleConfig(request, env) {
+  const origin = new URL(request.url).origin;
+  const fromEnv = env.WIDGET_PUBLIC_URL && String(env.WIDGET_PUBLIC_URL).trim();
+  const workerUrl = (fromEnv || origin).replace(/\/$/, '');
+  return json({ workerUrl });
+}
 
 function extractVideoId(url) {
   if (!url) return null;
@@ -174,6 +184,7 @@ async function handleGenerate(request, env) {
     video_description,
     video_thumbnail_url,
     custom_text,
+    text_enabled = true,
   } = body;
 
   if (!video_title) return json({ error: 'video_title is required' }, 400);
@@ -185,6 +196,8 @@ async function handleGenerate(request, env) {
       video_description,
       custom_text,
       hasImage: !!image_url,
+      styleImageUrl: (mode === 'style_ref') ? image_url : null,
+      textEnabled: text_enabled,
     });
     console.log('[gen] LLM:', JSON.stringify(llm));
 
@@ -194,26 +207,26 @@ async function handleGenerate(request, env) {
       result = await falQueue(env, 'fal-ai/pulid', {
         prompt: llm.image_prompt,
         reference_images: [{ image_url: image_url }],
-        image_size: { width: 1280, height: 720 },
+        image_size: "landscape_16_9",
         num_images: 1,
         num_inference_steps: 4,
         guidance_scale: 1.2,
-        id_scale: 0.8,
+        id_scale: 1.0,
       });
     } else if (image_url && mode === 'style_ref') {
       result = await falQueue(env, 'fal-ai/flux/dev/image-to-image', {
         prompt: llm.image_prompt,
         image_url,
-        image_size: { width: 1280, height: 720 },
-        strength: 0.7,
+        image_size: "landscape_16_9",
+        strength: 0.85,
         num_inference_steps: 28,
-        guidance_scale: 3.5,
+        guidance_scale: 4.5,
         num_images: 1,
       });
     } else {
       result = await falQueue(env, 'fal-ai/flux/dev', {
         prompt: llm.image_prompt,
-        image_size: { width: 1280, height: 720 },
+        image_size: "landscape_16_9",
         num_inference_steps: 28,
         guidance_scale: 3.5,
         num_images: 1,
@@ -222,14 +235,21 @@ async function handleGenerate(request, env) {
 
     if (!result.images?.length) return json({ error: 'No images generated' }, 502);
 
+    let overlayText = null;
+    if (text_enabled) {
+      overlayText = custom_text
+        || llm.overlay_text
+        || video_title.split(/\s+/).slice(0, 4).join(' ').toUpperCase();
+    }
+
     return json({
       image_url: result.images[0].url,
-      overlay_text: llm.overlay_text ?? null,
-      text_style: {
+      overlay_text: overlayText,
+      text_style: overlayText ? {
         position: llm.text_position || 'bottom',
         color: llm.text_color || '#FFFFFF',
         stroke_color: llm.text_stroke_color || '#000000',
-      },
+      } : null,
     });
   } catch (err) {
     console.error('[gen] Error:', err);
@@ -245,23 +265,43 @@ async function handleGenerate(request, env) {
   RULES
   - Image prompt: describe scene, lighting (dramatic), colours (vibrant, high-contrast), composition, mood.
     Do NOT mention any text or typography in the image prompt — text is added separately.
+  - COMPOSITION: All key subjects MUST be placed in the center of the frame. Keep a safe margin from all edges — the outer 15% of the image may be cropped. Never place important elements near the edges.
   - Overlay text: 2-5 words max, punchy, attention-grabbing. If the user supplied custom_text, use it exactly.
-    If none supplied, generate one OR return null when the image is stronger without text.
-  - If mode is "insert_me": describe a scene with one prominent person (face will be preserved from reference photo). Include pose, expression, placement details.
+    If text_required is true, you MUST always return overlay_text as a non-empty string — NEVER null.
+    If text_required is false, return null.
+  - If mode is "insert_me": THIS IS CRITICAL — the prompt MUST begin with a detailed description of a single person as the dominant subject.
+    The person MUST occupy at least 40-60% of the frame. Describe: close-up or medium shot, facing the camera, clearly visible face with expressive emotion (shock, excitement, confidence, etc.), specific pose and hand gestures, placement in the frame (centered or rule-of-thirds).
+    The face is the most important element — never obscure it. Background and environment come AFTER the person description.
   - If mode is "style_ref": describe a fresh scene matching the video topic; the reference image provides style/mood.
   - Aspect ratio 16:9, 1280x720.
 
 Reply with ONLY valid JSON, no markdown fences, no extra text:
 {"image_prompt":"...","overlay_text":"TEXT or null","text_position":"top|center|bottom","text_color":"#FFFFFF","text_stroke_color":"#000000"}`;
 
-async function craftPrompt(env, { mode, video_title, video_description, custom_text, hasImage }) {
-  const user = [
+async function craftPrompt(env, { mode, video_title, video_description, custom_text, hasImage, styleImageUrl, textEnabled }) {
+  const userLines = [
     `Video title: "${video_title}"`,
     `Description: "${video_description || '(not available)'}"`,
     `Mode: ${mode}`,
-    `Custom text: ${custom_text || '(none — auto-generate or decide no text)'}`,
+    `Custom text: ${custom_text || '(none — auto-generate)'}`,
     `Has reference image: ${hasImage ? 'yes' : 'no'}`,
-  ].join('\n');
+    `text_required: ${textEnabled ? 'true' : 'false'}`,
+  ];
+  if (styleImageUrl) {
+    userLines.push('A style reference image is attached. Analyze its visual style (art style, colour palette, rendering technique, mood) and use that in your prompt.');
+  }
+  const user = userLines.join('\n');
+
+  const llmBody = {
+    model: 'google/gemini-2.5-flash',
+    system_prompt: LLM_SYSTEM,
+    prompt: user,
+    temperature: 0.7,
+    max_tokens: 400,
+  };
+  if (styleImageUrl) {
+    llmBody.image_url = styleImageUrl;
+  }
 
   try {
     const r = await fetch(`${FAL_SYNC}/fal-ai/any-llm`, {
@@ -270,28 +310,30 @@ async function craftPrompt(env, { mode, video_title, video_description, custom_t
         Authorization: `Key ${env.FAL_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        system_prompt: LLM_SYSTEM,
-        prompt: user,
-        temperature: 0.7,
-        max_tokens: 400,
-      }),
+      body: JSON.stringify(llmBody),
     });
     if (!r.ok) throw new Error(`LLM ${r.status}`);
     const d = await r.json();
     const m = (d.output || '').match(/\{[\s\S]*\}/);
-    if (m) return JSON.parse(m[0]);
+    if (m) {
+      const parsed = JSON.parse(m[0]);
+      if (mode === 'insert_me' && hasImage) {
+        const lower = (parsed.image_prompt || '').toLowerCase();
+        const hasPersonRef = /\b(person|man|woman|face|portrait|looking at camera|facing|close-up|selfie)\b/.test(lower);
+        if (!hasPersonRef) {
+          parsed.image_prompt = 'Close-up of a person facing the camera with an expressive face, occupying 50% of the frame, ' + parsed.image_prompt;
+        }
+      }
+      return parsed;
+    }
   } catch (e) {
     console.warn('[gen] LLM fallback:', e.message);
   }
 
   return {
-    image_prompt: `Professional YouTube thumbnail, dramatic cinematic lighting, vibrant saturated colours, high contrast, ${
-      mode === 'insert_me' && hasImage
-        ? 'a confident person looking at camera with expressive face, '
-        : ''
-    }dynamic composition, topic: ${video_title}`,
+    image_prompt: mode === 'insert_me' && hasImage
+      ? `Close-up portrait of a person centered in the frame facing the camera with an expressive shocked excited face, mouth slightly open, eyes wide, pointing at camera or gesturing dramatically, occupying 50% of the frame, all important content in the center away from edges, professional YouTube thumbnail style, dramatic cinematic lighting, vibrant saturated colours, high contrast, dynamic background related to: ${video_title}`
+      : `Professional YouTube thumbnail, all key subjects centered in the frame with safe margins from edges, dramatic cinematic lighting, vibrant saturated colours, high contrast, dynamic composition, topic: ${video_title}`,
     overlay_text: custom_text || video_title.split(/\s+/).slice(0, 4).join(' ').toUpperCase(),
     text_position: 'bottom',
     text_color: '#FFFFFF',

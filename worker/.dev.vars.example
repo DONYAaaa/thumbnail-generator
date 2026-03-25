@@ -1,0 +1,7 @@
+# Copy to .dev.vars (gitignored) for local dev.
+FAL_KEY=
+
+# Optional. Base URL the browser should use for /analyze, /generate, /upload.
+# If unset, GET /config uses the request origin (correct when you open the app at the Worker URL).
+# Set this if the public URL differs from what the Worker sees (custom domain, tunnel, etc.).
+# WIDGET_PUBLIC_URL=http://localhost:8787
