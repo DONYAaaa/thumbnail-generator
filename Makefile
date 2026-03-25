@@ -1,21 +1,23 @@
-# Thumbnail generator — local tasks (macOS / Linux).
-# Requires Wrangler CLI: https://developers.cloudflare.com/workers/wrangler/install-and-update/
-
-.PHONY: help dev deploy check
+.PHONY: help install setup check dev deploy
 
 WORKER_DIR := worker
 
 help:
-	@echo "Targets:"
-	@echo "  make check   — verify wrangler is available"
-	@echo "  make dev     — run Worker + widget locally (wrangler dev)"
-	@echo "  make deploy  — deploy Worker to Cloudflare"
-	@echo ""
-	@echo "First-time: copy worker/.dev.vars.example to worker/.dev.vars and set FAL_KEY."
+	@echo "make install   install wrangler globally"
+	@echo "make setup     copy .dev.vars and login to cloudflare"
+	@echo "make check     verify wrangler is on PATH"
+	@echo "make dev       run worker locally"
+	@echo "make deploy    deploy worker to cloudflare"
+
+install:
+	npm install -g wrangler
+
+setup:
+	@[ -f $(WORKER_DIR)/.dev.vars ] || cp $(WORKER_DIR)/.dev.vars.example $(WORKER_DIR)/.dev.vars
+	wrangler login
 
 check:
-	@command -v wrangler >/dev/null 2>&1 || { echo "Install Wrangler: npm install -g wrangler"; exit 1; }
-	@wrangler --version
+	@command -v wrangler >/dev/null 2>&1 || { echo "wrangler not found, run: make install"; exit 1; }
 
 dev: check
 	cd $(WORKER_DIR) && wrangler dev
