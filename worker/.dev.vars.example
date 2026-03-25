@@ -1,7 +1,7 @@
 # Copy to .dev.vars (gitignored) for local dev.
 FAL_KEY=
 
-# Optional. Base URL the browser should use for /analyze, /generate, /upload.
-# If unset, GET /config uses the request origin (correct when you open the app at the Worker URL).
-# Set this if the public URL differs from what the Worker sees (custom domain, tunnel, etc.).
-# WIDGET_PUBLIC_URL=http://localhost:8787
+# Optional. Public base URL returned in GET /config as { "workerUrl": "..." }.
+# The widget uses that value for /analyze, /generate, /upload (embeds, tunnels, custom domains).
+# If unset or empty, /config uses the incoming request origin (fine when you open the app at the Worker URL).
+# WIDGET_PUBLIC_URL=https://your-worker.example.com

@@ -33,7 +33,6 @@ export default {
   },
 };
 
-/** Public bootstrap for the widget: base URL for API calls (from WIDGET_PUBLIC_URL or request origin). */
 function handleConfig(request, env) {
   const origin = new URL(request.url).origin;
   const fromEnv = env.WIDGET_PUBLIC_URL && String(env.WIDGET_PUBLIC_URL).trim();
@@ -102,7 +101,7 @@ async function handleAnalyze(request) {
         html.match(/<meta\s+name="description"\s+content="([^"]*)"/);
       if (m) description = htmlDecode(m[1]);
     }
-  } catch { /* description stays empty */ }
+  } catch {}
 
   return json({ id: videoId, title, author, description, thumbnail_url: thumb });
 }
