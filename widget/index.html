@@ -71,14 +71,14 @@
       </div>
 
       <div class="tg-section" style="margin-top: 6px">
-        <label class="tg-label" style="display: flex; align-items: center;">
-          Thumbnail text
+        <div class="tg-label" style="display: flex; align-items: center;">
+          <span>Thumbnail text</span>
           <span class="tg-tooltip-trigger" style="margin-right: auto;">?<span class="tg-tooltip-box">When enabled, text will be overlaid on the thumbnail. Type your own or leave empty to auto-generate from the video title.</span></span>
-          <span class="tg-toggle">
+          <label class="tg-toggle" for="tgTextToggle">
             <input type="checkbox" id="tgTextToggle" checked>
             <span class="tg-toggle-track"></span>
-          </span>
-        </label>
+          </label>
+        </div>
         <input class="tg-input" id="tgCustomText" type="text"
                placeholder="Leave empty to auto-generate">
       </div>
@@ -910,6 +910,23 @@
   });
 
   showStep(els.step1);
+
+  document.querySelectorAll('.tg-tooltip-trigger').forEach(function (trigger) {
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = trigger.classList.contains('tg-tooltip-open');
+      document.querySelectorAll('.tg-tooltip-trigger.tg-tooltip-open').forEach(function (t) {
+        t.classList.remove('tg-tooltip-open');
+      });
+      if (!isOpen) trigger.classList.add('tg-tooltip-open');
+    });
+  });
+
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.tg-tooltip-trigger.tg-tooltip-open').forEach(function (t) {
+      t.classList.remove('tg-tooltip-open');
+    });
+  });
 })();
 
 </script>

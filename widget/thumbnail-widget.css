@@ -446,8 +446,8 @@
   line-height: 1.5;
   padding: 8px 12px;
   border-radius: 8px;
-  max-width: 240px;
-  width: max-content;
+  width: 220px;
+  white-space: normal;
   z-index: 100;
   pointer-events: none;
 }
@@ -467,7 +467,8 @@
   color: rgb(77, 58, 251);
 }
 
-.tg-tooltip-trigger:hover .tg-tooltip-box {
+.tg-tooltip-trigger:hover .tg-tooltip-box,
+.tg-tooltip-trigger.tg-tooltip-open .tg-tooltip-box {
   display: block;
 }
 
