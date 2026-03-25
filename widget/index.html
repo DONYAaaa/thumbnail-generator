@@ -4,11 +4,11 @@
 <style>
   .tg-widget {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    max-width: 1100px;
-    min-height: 560px;
+    max-width: 1280px;
+    min-height: 780px;
     margin: 0px auto;
     background: #ffffff;
-    border-radius: 20px;
+    border-radius: 24px;
     box-shadow: 0 4px 40px rgba(0, 0, 0, 0.08);
     color: #1a1a2e;
     display: flex;
@@ -23,20 +23,24 @@
   /* ── Header ── */
 
   .tg-header {
-    padding: 20px 20px 28px 36px;
+    padding: 32px 24px 32px;
     border-bottom: 1px solid #e8e8f0;
+    text-align: center;
   }
 
   .tg-title {
-    font-size: 28px;
+    font-size: 36px;
     font-weight: 800;
     letter-spacing: -0.5px;
-    margin: 0 0 4px;
-    color: #1a1a2e;
+    margin: 0 0 8px;
+    background: linear-gradient(135deg, #1a1a2e 0%, rgb(77, 58, 251) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .tg-subtitle {
-    font-size: 15px;
+    font-size: 16px;
     color: #8888a0;
     margin: 0;
   }
@@ -50,9 +54,9 @@
   }
 
   .tg-left {
-    width: 460px;
+    width: 520px;
     flex-shrink: 0;
-    padding: 36px;
+    padding: 40px;
     border-right: 1px solid #e8e8f0;
     display: flex;
     flex-direction: column;
@@ -60,7 +64,7 @@
 
   .tg-right {
     flex: 1;
-    padding: 36px;
+    padding: 40px;
     background: #f9f9fb;
     display: flex;
     position: relative;
@@ -68,22 +72,22 @@
 
   /* ── Sections ── */
 
-  .tg-section { margin-bottom: 24px; }
+  .tg-section { margin-bottom: 28px; }
 
   .tg-label {
     display: block;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: #1a1a2e;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .tg-badge {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     color: #8888a0;
     background: #f0f0f8;
-    padding: 2px 8px;
+    padding: 3px 9px;
     border-radius: 4px;
     margin-left: 6px;
     vertical-align: 1px;
@@ -93,14 +97,14 @@
 
   .tg-input {
     width: 100%;
-    height: 52px;
-    padding: 0 16px;
-    font-size: 15px;
+    height: 56px;
+    padding: 0 18px;
+    font-size: 16px;
     font-family: inherit;
     color: #1a1a2e;
     background: #ffffff;
     border: 1px solid #e8e8f0;
-    border-radius: 12px;
+    border-radius: 14px;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
@@ -138,8 +142,8 @@
   .tg-url-group .tg-input {
     border: none;
     border-radius: 0;
-    height: 50px;
-    padding: 0 8px;
+    height: 54px;
+    padding: 0 10px;
     min-width: 0;
   }
 
@@ -149,14 +153,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
+    width: 46px;
+    height: 46px;
     background: rgb(77, 58, 251);
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     flex-shrink: 0;
-    margin: 4px;
+    margin: 5px;
     position: relative;
     transition: opacity 0.2s, transform 0.15s;
   }
@@ -265,13 +269,28 @@
     color: #1a1a2e;
   }
 
+  /* ── Photo row layout ── */
+
+  .tg-photo-row {
+    display: flex;
+    gap: 10px;
+    min-height: 140px;
+    height: 180px;
+  }
+
+  .tg-photo-area {
+    width: 50%;
+    min-width: 0;
+    position: relative;
+  }
+
   /* ── Dropzone ── */
 
   .tg-dropzone {
     border: 2px dashed #d0d0e8;
-    border-radius: 12px;
+    border-radius: 14px;
     background: #f8f8ff;
-    height: 110px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -301,26 +320,28 @@
   .tg-dropzone-text {
     font-size: 13px;
     color: #8888a0;
+    text-align: center;
   }
 
   /* ── Mode toggle ── */
 
   .tg-mode-toggle {
     display: flex;
+    flex-direction: column;
     gap: 6px;
-    margin-bottom: 10px;
+    width: 50%;
   }
 
   .tg-mode-btn {
     flex: 1;
-    padding: 9px 8px;
+    padding: 10px 14px;
     font-size: 13px;
     font-weight: 600;
     font-family: inherit;
     color: #8888a0;
     background: #f8f8ff;
     border: 1.5px solid #e0e0ed;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -329,6 +350,7 @@
     gap: 6px;
     overflow: visible;
     position: relative;
+    white-space: nowrap;
   }
 
   .tg-mode-btn:hover:not(.active) {
@@ -349,17 +371,20 @@
   /* ── Photo preview ── */
 
   .tg-photo-preview {
-    position: relative;
+    position: absolute;
+    inset: 0;
     display: none;
   }
 
-  .tg-photo-preview.has-photo { display: block; }
+  .tg-photo-preview.has-photo {
+    display: block;
+  }
 
   .tg-photo-preview img {
     width: 100%;
-    height: 110px;
+    height: 100%;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 14px;
     border: 1px solid #e8e8f0;
   }
 
@@ -384,6 +409,59 @@
   }
 
   .tg-photo-remove:hover { background: rgba(220, 38, 38, 0.8); }
+
+  /* ── Toggle switch ── */
+
+  .tg-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .tg-toggle {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .tg-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+
+  .tg-toggle-track {
+    position: absolute;
+    inset: 0;
+    background: #d0d0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .tg-toggle-track::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+
+  .tg-toggle input:checked + .tg-toggle-track {
+    background: rgb(77, 58, 251);
+  }
+
+  .tg-toggle input:checked + .tg-toggle-track::after {
+    transform: translateX(16px);
+  }
 
   /* ── Tooltips ── */
 
@@ -451,16 +529,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
-    height: 56px;
-    font-size: 17px;
+    height: 62px;
+    font-size: 18px;
     font-weight: 700;
     font-family: inherit;
     color: #fff;
     background: rgb(77, 58, 251);
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
     margin-top: 4px;
@@ -600,13 +678,13 @@
   }
 
   .tg-preview-icon {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 6px;
+    width: 90px;
+    height: 90px;
+    margin-bottom: 8px;
   }
 
   .tg-preview-text {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
     color: #b0b0c8;
     margin: 0;
@@ -614,7 +692,7 @@
   }
 
   .tg-preview-hint {
-    font-size: 14px;
+    font-size: 15px;
     color: #c8c8d8;
     margin: 0;
     text-align: center;
@@ -674,7 +752,7 @@
   }
 
   .tg-loader-text {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     color: #7c6dc8;
   }
@@ -706,14 +784,14 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 12px 16px;
-    font-size: 14px;
+    padding: 14px 18px;
+    font-size: 15px;
     font-weight: 500;
     font-family: inherit;
     color: #1a1a2e;
     background: #ffffff;
     border: 1.5px solid #e0e0ed;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
   }
@@ -978,6 +1056,19 @@
     }
     .tg-header { padding: 24px 20px 20px; }
     .tg-left, .tg-right { padding: 24px 20px; }
+    .tg-photo-row {
+      flex-direction: column-reverse;
+      height: auto;
+    }
+    .tg-photo-area {
+      width: 100%;
+      height: 160px;
+    }
+    .tg-mode-toggle {
+      flex-direction: row;
+      width: 100%;
+    }
+    .tg-mode-btn { flex: 1; }
     .tg-result-actions { grid-template-columns: 1fr 1fr; }
     .tg-share-grid { grid-template-columns: 1fr 1fr; }
   }
@@ -1025,34 +1116,43 @@
 
       <div class="tg-section">
         <label class="tg-label">Your photo <span class="tg-badge">optional</span></label>
-        <div class="tg-mode-toggle">
-          <button class="tg-mode-btn active" data-mode="insert_me" id="tgModeInsert">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Insert me
-            <span class="tg-tooltip-trigger">?<span class="tg-tooltip-box">Upload a selfie or portrait photo. AI will generate a thumbnail with you in it &mdash; your face and appearance will be preserved.</span></span>
-          </button>
-          <button class="tg-mode-btn" data-mode="style_ref" id="tgModeStyle">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            Style reference
-            <span class="tg-tooltip-trigger">?<span class="tg-tooltip-box">Upload any thumbnail you like as a reference. AI will create a new one with a similar visual style, colors and composition &mdash; but for your video.</span></span>
-          </button>
-        </div>
-        <div class="tg-dropzone" id="tgDropzone">
-          <div class="tg-dropzone-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <div class="tg-photo-row">
+          <div class="tg-photo-area">
+            <div class="tg-dropzone" id="tgDropzone">
+              <div class="tg-dropzone-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <div class="tg-dropzone-text" id="tgDropzoneText">Click or drag your portrait photo here</div>
+            </div>
+            <input type="file" id="tgFileInput" accept="image/*" hidden>
+            <div class="tg-photo-preview" id="tgPhotoPreview">
+              <img id="tgPhotoImg" src="" alt="">
+              <button class="tg-photo-remove" id="tgPhotoRemove" title="Remove">&times;</button>
+            </div>
           </div>
-          <div class="tg-dropzone-text" id="tgDropzoneText">Click or drag your portrait photo here</div>
-        </div>
-        <input type="file" id="tgFileInput" accept="image/*" hidden>
-        <div class="tg-photo-preview" id="tgPhotoPreview">
-          <img id="tgPhotoImg" src="" alt="">
-          <button class="tg-photo-remove" id="tgPhotoRemove" title="Remove">&times;</button>
+          <div class="tg-mode-toggle">
+            <button class="tg-mode-btn active" data-mode="insert_me" id="tgModeInsert">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Insert me
+              <span class="tg-tooltip-trigger">?<span class="tg-tooltip-box">Upload a selfie or portrait photo. AI will generate a thumbnail with you in it &mdash; your face and appearance will be preserved.</span></span>
+            </button>
+            <button class="tg-mode-btn" data-mode="style_ref" id="tgModeStyle">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Style ref
+              <span class="tg-tooltip-trigger">?<span class="tg-tooltip-box">Upload any thumbnail you like as a reference. AI will create a new one with a similar visual style, colors and composition &mdash; but for your video.</span></span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="tg-section">
-        <label class="tg-label">Thumbnail text <span class="tg-badge">optional</span>
-          <span class="tg-tooltip-trigger">?<span class="tg-tooltip-box">The text that will appear on the thumbnail. Leave empty and AI will generate it automatically from the video title.</span></span>
+      <div class="tg-section" style="margin-top: 6px">
+        <label class="tg-label" style="display: flex; align-items: center;">
+          Thumbnail text
+          <span class="tg-tooltip-trigger" style="margin-right: auto;">?<span class="tg-tooltip-box">When enabled, text will be overlaid on the thumbnail. Type your own or leave empty to auto-generate from the video title.</span></span>
+          <span class="tg-toggle">
+            <input type="checkbox" id="tgTextToggle" checked>
+            <span class="tg-toggle-track"></span>
+          </span>
         </label>
         <input class="tg-input" id="tgCustomText" type="text"
                placeholder="Leave empty to auto-generate">
@@ -1214,6 +1314,8 @@
     mode: "insert_me",
     videoData: null,
     userPhoto: null,
+    photos: { insert_me: null, style_ref: null },
+    textEnabled: true,
     customText: "",
     resultUrl: null,
     overlayText: null,
@@ -1246,6 +1348,7 @@
     photoPreview: $("tgPhotoPreview"),
     photoImg:     $("tgPhotoImg"),
     photoRemove:  $("tgPhotoRemove"),
+    textToggle:   $("tgTextToggle"),
     customText:   $("tgCustomText"),
     generateBtn:  $("tgGenerateBtn"),
     backToStep1:  $("tgBackToStep1"),
@@ -1304,6 +1407,8 @@
   }
 
   function setMode(mode) {
+    if (mode === state.mode) return;
+    state.photos[state.mode] = state.userPhoto;
     state.mode = mode;
     els.modeInsert.classList.toggle("active", mode === "insert_me");
     els.modeStyle.classList.toggle("active", mode === "style_ref");
@@ -1312,12 +1417,25 @@
     } else {
       els.dropzoneText.textContent = "Click or drag a reference thumbnail here";
     }
-    removePhoto();
+    var saved = state.photos[mode];
+    if (saved) {
+      state.userPhoto = saved;
+      els.photoImg.src = URL.createObjectURL(saved);
+      els.photoPreview.classList.add("has-photo");
+      els.dropzone.style.display = "none";
+    } else {
+      state.userPhoto = null;
+      els.photoImg.src = "";
+      els.photoPreview.classList.remove("has-photo");
+      els.dropzone.style.display = "";
+      els.fileInput.value = "";
+    }
   }
 
   function handlePhoto(file) {
     if (!file || !file.type.startsWith("image/")) return;
     state.userPhoto = file;
+    state.photos[state.mode] = file;
     els.photoImg.src = URL.createObjectURL(file);
     els.photoPreview.classList.add("has-photo");
     els.dropzone.style.display = "none";
@@ -1325,6 +1443,7 @@
 
   function removePhoto() {
     state.userPhoto = null;
+    state.photos[state.mode] = null;
     els.photoImg.src = "";
     els.photoPreview.classList.remove("has-photo");
     els.dropzone.style.display = "";
@@ -1419,6 +1538,7 @@
 
   async function generateThumbnail() {
     hideError(els.step2Error);
+    state.textEnabled = els.textToggle.checked;
     state.customText = els.customText.value.trim();
     state.step = "generating";
     showStep(els.generating);
@@ -1436,7 +1556,8 @@
         video_title: state.videoData.title,
         video_description: state.videoData.description || "",
         video_thumbnail_url: state.videoData.thumbnail_url || "",
-        custom_text: state.customText || "",
+        custom_text: state.textEnabled ? (state.customText || "") : "",
+        text_enabled: state.textEnabled,
       };
 
       var res = await fetch(CONFIG.workerUrl + "/generate", {
@@ -1451,7 +1572,7 @@
       state.overlayText = json.overlay_text;
       state.textStyle = json.text_style;
 
-      if (json.overlay_text) {
+      if (state.textEnabled && json.overlay_text) {
         state.finalImageUrl = await overlayTextOnImage(
           json.image_url, json.overlay_text, json.text_style
         );
@@ -1608,11 +1729,14 @@
   function startOver() {
     state = {
       step: "idle", mode: state.mode, videoData: null,
-      userPhoto: null, customText: "", resultUrl: null,
+      userPhoto: null, photos: { insert_me: null, style_ref: null },
+      textEnabled: true, customText: "", resultUrl: null,
       overlayText: null, textStyle: null, finalImageUrl: null, error: null,
     };
     els.urlInput.value = "";
     els.customText.value = "";
+    els.textToggle.checked = true;
+    els.customText.style.display = "";
     removePhoto();
     hideError(els.step1Error);
     hideError(els.step2Error);
@@ -1639,6 +1763,11 @@
     if (f && f[0]) handlePhoto(f[0]);
   });
   els.photoRemove.addEventListener("click", removePhoto);
+
+  els.textToggle.addEventListener("change", function () {
+    state.textEnabled = this.checked;
+    els.customText.style.display = this.checked ? "" : "none";
+  });
 
   els.generateBtn.addEventListener("click", generateThumbnail);
   els.step2Retry.addEventListener("click", function () { hideError(els.step2Error); });
