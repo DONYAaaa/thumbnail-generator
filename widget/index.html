@@ -1,15 +1,14 @@
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="./youtube.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
   .tg-widget {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    max-width: 900px;
+    max-width: 1100px;
     min-height: 560px;
-    margin: 0 auto;
+    margin: 0px auto;
     background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    border-radius: 20px;
+    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.08);
     color: #1a1a2e;
     display: flex;
     flex-direction: column;
@@ -23,19 +22,20 @@
   /* ── Header ── */
 
   .tg-header {
-    padding: 22px 28px;
+    padding: 36px 36px 28px 36px;
     border-bottom: 1px solid #e8e8f0;
   }
 
   .tg-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 0 3px;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 0 0 4px;
     color: #1a1a2e;
   }
 
   .tg-subtitle {
-    font-size: 13px;
+    font-size: 15px;
     color: #8888a0;
     margin: 0;
   }
@@ -49,9 +49,9 @@
   }
 
   .tg-left {
-    width: 380px;
+    width: 460px;
     flex-shrink: 0;
-    padding: 28px;
+    padding: 36px;
     border-right: 1px solid #e8e8f0;
     display: flex;
     flex-direction: column;
@@ -59,7 +59,7 @@
 
   .tg-right {
     flex: 1;
-    padding: 28px;
+    padding: 36px;
     background: #f9f9fb;
     display: flex;
     position: relative;
@@ -67,11 +67,11 @@
 
   /* ── Sections ── */
 
-  .tg-section { margin-bottom: 20px; }
+  .tg-section { margin-bottom: 24px; }
 
   .tg-label {
     display: block;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     color: #1a1a2e;
     margin-bottom: 8px;
@@ -92,13 +92,14 @@
 
   .tg-input {
     width: 100%;
-    padding: 10px 14px;
-    font-size: 14px;
+    height: 52px;
+    padding: 0 16px;
+    font-size: 15px;
     font-family: inherit;
     color: #1a1a2e;
     background: #ffffff;
     border: 1px solid #e8e8f0;
-    border-radius: 10px;
+    border-radius: 12px;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
@@ -116,7 +117,7 @@
     display: flex;
     align-items: center;
     border: 1px solid #e8e8f0;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #fff;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
@@ -136,7 +137,8 @@
   .tg-url-group .tg-input {
     border: none;
     border-radius: 0;
-    padding: 10px 8px;
+    height: 50px;
+    padding: 0 8px;
     min-width: 0;
   }
 
@@ -146,14 +148,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
     background: rgb(77, 58, 251);
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     flex-shrink: 0;
-    margin: 3px;
+    margin: 4px;
     position: relative;
     transition: opacity 0.2s, transform 0.15s;
   }
@@ -195,11 +197,13 @@
   .tg-video-card {
     display: none;
     align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
+    gap: 12px;
+    padding: 12px;
+    padding-left: 14px;
     background: #f0f0f8;
-    border-radius: 8px;
-    margin-top: 10px;
+    border-radius: 10px;
+    border-left: 3px solid #22c55e;
+    margin-top: 12px;
     animation: tg-fadeIn 0.3s ease;
   }
 
@@ -210,10 +214,10 @@
   }
 
   .tg-video-card img {
-    width: 40px;
-    height: 30px;
+    width: 56px;
+    height: 42px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 6px;
     flex-shrink: 0;
   }
 
@@ -223,7 +227,7 @@
   }
 
   .tg-video-card-title {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     color: #1a1a2e;
     white-space: nowrap;
@@ -232,27 +236,27 @@
   }
 
   .tg-video-card-author {
-    font-size: 11px;
+    font-size: 12px;
     color: #8888a0;
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
   .tg-video-card-change {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none;
-    border: 1px solid #d0d0e0;
+    background: #f0f0f8;
+    border: none;
     border-radius: 50%;
-    color: #8888a0;
-    font-size: 12px;
+    color: #666680;
+    font-size: 16px;
     cursor: pointer;
     flex-shrink: 0;
     padding: 0;
     line-height: 1;
-    transition: background 0.2s, color 0.2s;
+    transition: all 0.15s;
   }
 
   .tg-video-card-change:hover {
@@ -264,9 +268,9 @@
 
   .tg-dropzone {
     border: 2px dashed #d0d0e8;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #f8f8ff;
-    height: 90px;
+    height: 110px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -298,6 +302,47 @@
     color: #8888a0;
   }
 
+  /* ── Mode toggle ── */
+
+  .tg-mode-toggle {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .tg-mode-btn {
+    flex: 1;
+    padding: 9px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #8888a0;
+    background: #f8f8ff;
+    border: 1.5px solid #e0e0ed;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .tg-mode-btn:hover:not(.active) {
+    background: #f0f0f8;
+    color: #6060a0;
+  }
+
+  .tg-mode-btn.active {
+    color: rgb(77, 58, 251);
+    background: rgba(77, 58, 251, 0.06);
+    border-color: rgb(77, 58, 251);
+  }
+
+  .tg-mode-btn svg {
+    flex-shrink: 0;
+  }
+
   /* ── Photo preview ── */
 
   .tg-photo-preview {
@@ -309,9 +354,9 @@
 
   .tg-photo-preview img {
     width: 100%;
-    height: 90px;
+    height: 110px;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 12px;
     border: 1px solid #e8e8f0;
   }
 
@@ -337,6 +382,66 @@
 
   .tg-photo-remove:hover { background: rgba(220, 38, 38, 0.8); }
 
+  /* ── Tooltips ── */
+
+  .tg-tooltip-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid #b0b4c0;
+    border-radius: 50%;
+    color: #8888a0;
+    font-size: 11px;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 1;
+    cursor: help;
+    position: relative;
+    margin-left: 4px;
+    vertical-align: 1px;
+    transition: all 0.2s;
+  }
+
+  .tg-tooltip-box {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a2e;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 8px 12px;
+    border-radius: 8px;
+    max-width: 220px;
+    width: max-content;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .tg-tooltip-box::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1a1a2e;
+  }
+
+  .tg-tooltip-trigger:hover {
+    border-color: rgb(77, 58, 251);
+    color: rgb(77, 58, 251);
+  }
+
+  .tg-tooltip-trigger:hover .tg-tooltip-box {
+    display: block;
+  }
+
   /* ── Generate button ── */
 
   .tg-generate-btn {
@@ -345,21 +450,21 @@
     justify-content: center;
     gap: 8px;
     width: 100%;
-    height: 48px;
-    font-size: 14px;
-    font-weight: 600;
+    height: 56px;
+    font-size: 17px;
+    font-weight: 700;
     font-family: inherit;
     color: #fff;
     background: rgb(77, 58, 251);
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
     margin-top: 4px;
   }
 
   .tg-generate-btn:hover {
-    opacity: 0.93;
+    background: rgb(55, 38, 220);
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(77, 58, 251, 0.28);
   }
@@ -372,7 +477,7 @@
   .tg-widget:has(#tgStep1.active) .tg-generate-btn,
   .tg-widget:has(#tgLoading.active) .tg-generate-btn,
   .tg-widget:has(#tgGenerating.active) .tg-generate-btn {
-    opacity: 0.5;
+    opacity: 0.4;
     pointer-events: none;
     cursor: not-allowed;
     transform: none;
@@ -383,39 +488,52 @@
 
   .tg-error-box {
     display: none;
-    padding: 12px 14px;
-    background: #fff0f0;
-    border: 1px solid #ffcccc;
-    border-radius: 8px;
+    padding: 14px 16px;
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
     margin-top: 12px;
+    overflow: hidden;
   }
 
   .tg-error-box.show { display: block; animation: tg-fadeIn 0.25s ease; }
 
   .tg-error-text {
-    font-size: 13px;
+    font-size: 14px;
     color: #dc2626;
     margin: 0 0 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
   }
 
   .tg-error-text::before {
-    content: '\26A0\FE0F  ';
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='8' x2='12' y2='12'/%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'/%3E%3C/svg%3E") no-repeat center / contain;
   }
 
   .tg-error-retry {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     font-family: inherit;
     color: #dc2626;
-    background: none;
-    border: 1px solid #ffcccc;
-    border-radius: 6px;
+    background: transparent;
+    border: 1.5px solid #fca5a5;
+    border-radius: 8px;
     padding: 6px 14px;
     cursor: pointer;
     transition: background 0.2s;
   }
 
-  .tg-error-retry:hover { background: rgba(220, 38, 38, 0.06); }
+  .tg-error-retry:hover { background: #fff0f0; }
 
   /* ══════════════════════════════════
      RIGHT COLUMN — preview states
@@ -458,8 +576,8 @@
   }
 
   .tg-preview-idle {
-    background: linear-gradient(135deg, #f0f0f8, #e8e8f4);
-    border: 2px dashed #d8d8ec;
+    background: #f4f5f7;
+    border: 2px dashed #d0d3dc;
   }
 
   .tg-preview-ready-box {
@@ -479,13 +597,13 @@
   }
 
   .tg-preview-icon {
-    width: 56px;
-    height: 56px;
-    margin-bottom: 4px;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 6px;
   }
 
   .tg-preview-text {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 500;
     color: #b0b0c8;
     margin: 0;
@@ -493,7 +611,7 @@
   }
 
   .tg-preview-hint {
-    font-size: 13px;
+    font-size: 14px;
     color: #c8c8d8;
     margin: 0;
     text-align: center;
@@ -570,55 +688,231 @@
     object-fit: cover;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(77, 58, 251, 0.15);
-    margin-bottom: 16px;
+    margin-bottom: 0;
   }
 
   .tg-result-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .tg-result-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    color: #1a1a2e;
+    background: #ffffff;
+    border: 1.5px solid #e0e0ed;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tg-result-btn:hover {
+    border-color: rgb(77, 58, 251);
+    color: rgb(77, 58, 251);
+    background: #f4f4fb;
+  }
+
+  .tg-result-btn-primary {
+    background: rgb(77, 58, 251);
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+  }
+
+  .tg-result-btn-primary:hover {
+    background: rgb(60, 45, 220);
+    transform: translateY(-1px);
+    color: #ffffff;
+    border: none;
+  }
+
+  .tg-result-btn-primary svg {
+    stroke: #ffffff;
+  }
+
+  .tg-result-btn svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ── Share modal ── */
+
+  .tg-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+  }
+
+  .tg-modal-overlay.open {
+    display: block;
+    animation: tg-modalFadeIn 0.25s ease;
+  }
+
+  .tg-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: tg-modalSlideIn 0.25s ease;
+  }
+
+  .tg-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .tg-modal-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+  }
+
+  .tg-modal-close {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1.5px solid #e0e0ed;
+    border-radius: 8px;
+    color: #8888a0;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: all 0.2s;
+  }
+
+  .tg-modal-close:hover {
+    background: #f4f4fb;
+    color: #1a1a2e;
+  }
+
+  .tg-modal-preview {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e8e8f0;
+    margin-bottom: 20px;
+  }
+
+  .tg-modal-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8888a0;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tg-share-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .tg-share-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .tg-share-social:hover { opacity: 0.85; }
+
+  .tg-share-x  { background: #000000; }
+  .tg-share-fb { background: #1877f2; }
+  .tg-share-tg { background: #229ed9; }
+  .tg-share-wa { background: #25d366; }
+
+  .tg-share-social svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .tg-copylink-row {
     display: flex;
     gap: 8px;
   }
 
-  .tg-result-btn {
+  .tg-copylink-input {
     flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px 8px;
+    min-width: 0;
+    padding: 10px 14px;
     font-size: 13px;
-    font-weight: 500;
     font-family: inherit;
     color: #1a1a2e;
-    background: #fff;
-    border: 1px solid #e8e8f0;
+    background: #f4f4fb;
+    border: 1.5px solid #e0e0ed;
+    border-radius: 10px;
+    outline: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tg-copylink-btn {
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #fff;
+    background: rgb(77, 58, 251);
+    border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+    transition: background 0.2s;
+    white-space: nowrap;
   }
 
-  .tg-result-btn:hover {
-    background: #f0f0f8;
-    border-color: #d0d0e8;
+  .tg-copylink-btn:hover { background: rgb(55, 38, 220); }
+
+  @keyframes tg-modalFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
-  .tg-start-over {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 10px;
-    font-size: 13px;
-    font-weight: 500;
-    font-family: inherit;
-    color: #8888a0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-top: 8px;
-    transition: color 0.2s;
+  @keyframes tg-modalSlideIn {
+    from { opacity: 0; transform: translate(-50%, calc(-50% + 10px)); }
+    to   { opacity: 1; transform: translate(-50%, -50%); }
   }
-
-  .tg-start-over:hover { color: #1a1a2e; }
 
   /* ── Toast ── */
 
@@ -679,9 +973,10 @@
     .tg-right {
       min-height: 280px;
     }
-    .tg-header { padding: 18px 20px; }
-    .tg-left, .tg-right { padding: 20px; }
-    .tg-result-actions { flex-wrap: wrap; }
+    .tg-header { padding: 24px 20px 20px; }
+    .tg-left, .tg-right { padding: 24px 20px; }
+    .tg-result-actions { grid-template-columns: 1fr 1fr; }
+    .tg-share-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
 
@@ -716,7 +1011,7 @@
             <div class="tg-video-card-title" id="tgVideoTitle2"></div>
             <div class="tg-video-card-author" id="tgVideoAuthor2"></div>
           </div>
-          <button class="tg-video-card-change" id="tgBackToStep1" title="Change video">&times;</button>
+          <button class="tg-video-card-change" id="tgBackToStep1" title="Change video">&#x2715;</button>
         </div>
 
         <div class="tg-error-box" id="tgStep1Error">
@@ -726,12 +1021,24 @@
       </div>
 
       <div class="tg-section">
-        <label class="tg-label">Your photo <span class="tg-badge">optional</span></label>
+        <label class="tg-label">Your photo <span class="tg-badge">optional</span>
+          <span class="tg-tooltip-trigger">?<span class="tg-tooltip-box" id="tgPhotoTooltipText">Upload your portrait photo. AI will preserve your likeness in the thumbnail.</span></span>
+        </label>
+        <div class="tg-mode-toggle">
+          <button class="tg-mode-btn active" data-mode="insert_me" id="tgModeInsert">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Insert me
+          </button>
+          <button class="tg-mode-btn" data-mode="style_ref" id="tgModeStyle">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Style reference
+          </button>
+        </div>
         <div class="tg-dropzone" id="tgDropzone">
           <div class="tg-dropzone-icon">
             <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           </div>
-          <div class="tg-dropzone-text">Click or drag photo here</div>
+          <div class="tg-dropzone-text" id="tgDropzoneText">Click or drag your portrait photo here</div>
         </div>
         <input type="file" id="tgFileInput" accept="image/*" hidden>
         <div class="tg-photo-preview" id="tgPhotoPreview">
@@ -741,13 +1048,15 @@
       </div>
 
       <div class="tg-section">
-        <label class="tg-label">Thumbnail text</label>
+        <label class="tg-label">Thumbnail text <span class="tg-badge">optional</span>
+          <span class="tg-tooltip-trigger">?<span class="tg-tooltip-box">The text that will appear on the thumbnail. Leave empty and AI will generate it automatically from the video title.</span></span>
+        </label>
         <input class="tg-input" id="tgCustomText" type="text"
                placeholder="Leave empty to auto-generate">
       </div>
 
       <button class="tg-generate-btn" id="tgGenerateBtn">
-        <span>&#10024;</span> Generate Thumbnail
+        Generate Thumbnail <span style="font-size: 16px; line-height: 1">&#x2726;</span>
       </button>
 
       <div class="tg-error-box" id="tgStep2Error">
@@ -764,9 +1073,9 @@
         <div class="tg-preview-box tg-preview-idle">
           <div class="tg-preview-inner">
             <svg class="tg-preview-icon" viewBox="0 0 56 56" fill="none">
-              <path d="M28 6l4 12 12 4-12 4-4 12-4-12L12 22l12-4 4-12z" stroke="#d0d0e8" stroke-width="1.8" fill="#e8e8f4"/>
-              <path d="M44 24l2.5 7 7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5 2.5-7z" stroke="#d8d8ec" stroke-width="1.4" fill="#ededf6"/>
-              <path d="M14 34l2 5.5 5.5 2-5.5 2-2 5.5-2-5.5L6 38l5.5-2 2-5.5z" stroke="#d8d8ec" stroke-width="1.4" fill="#ededf6"/>
+              <path d="M28 6l4 12 12 4-12 4-4 12-4-12L12 22l12-4 4-12z" stroke="#c0c4d0" stroke-width="1.8" fill="#e2e4ea"/>
+              <path d="M44 24l2.5 7 7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5 2.5-7z" stroke="#c8ccd6" stroke-width="1.4" fill="#e8eaee"/>
+              <path d="M14 34l2 5.5 5.5 2-5.5 2-2 5.5-2-5.5L6 38l5.5-2 2-5.5z" stroke="#c8ccd6" stroke-width="1.4" fill="#e8eaee"/>
             </svg>
             <p class="tg-preview-text">Your thumbnail will appear here</p>
             <p class="tg-preview-hint">Fill in the fields on the left and click Generate</p>
@@ -794,7 +1103,7 @@
               <path d="M14 34l2 5.5 5.5 2-5.5 2-2 5.5-2-5.5L6 38l5.5-2 2-5.5z" stroke="#c4b8f0" stroke-width="1.4" fill="#e4ddf8"/>
             </svg>
             <p class="tg-preview-text">Ready to generate</p>
-            <p class="tg-preview-hint">Click &ldquo;&#10024; Generate Thumbnail&rdquo; to create your AI thumbnail</p>
+            <p class="tg-preview-hint">Click &ldquo;Generate Thumbnail&rdquo; to create your AI thumbnail</p>
           </div>
         </div>
       </div>
@@ -814,14 +1123,62 @@
         <div class="tg-result-wrap">
           <img class="tg-result-img" id="tgResultImg" src="" alt="Generated thumbnail">
           <div class="tg-result-actions">
-            <button class="tg-result-btn" id="tgDownloadBtn">&#11015; Download</button>
-            <button class="tg-result-btn" id="tgCopyLinkBtn">&#128279; Copy link</button>
-            <button class="tg-result-btn" id="tgRegenerateBtn">&#128260; Generate again</button>
+            <button class="tg-result-btn tg-result-btn-primary" id="tgDownloadBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+            <button class="tg-result-btn tg-result-btn-primary" id="tgRegenerateBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              Generate again
+            </button>
+            <button class="tg-result-btn" id="tgCopyImageBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy image
+            </button>
+            <button class="tg-result-btn" id="tgShareBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Share
+            </button>
           </div>
-          <button class="tg-start-over" id="tgStartOverBtn">&larr; Start over</button>
+          <button id="tgCopyLinkBtn" hidden></button>
+          <button id="tgStartOverBtn" hidden></button>
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <div class="tg-modal-overlay" id="tgShareOverlay">
+    <div class="tg-modal">
+      <div class="tg-modal-header">
+        <h3 class="tg-modal-title">Share your thumbnail</h3>
+        <button class="tg-modal-close" id="tgShareClose">&times;</button>
+      </div>
+      <img class="tg-modal-preview" id="tgSharePreview" src="" alt="Thumbnail preview">
+      <p class="tg-modal-label">Share to</p>
+      <div class="tg-share-grid">
+        <a class="tg-share-social tg-share-x" id="tgShareX" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Twitter / X
+        </a>
+        <a class="tg-share-social tg-share-fb" id="tgShareFb" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </a>
+        <a class="tg-share-social tg-share-tg" id="tgShareTg" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          Telegram
+        </a>
+        <a class="tg-share-social tg-share-wa" id="tgShareWa" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+      <p class="tg-modal-label">Or copy link</p>
+      <div class="tg-copylink-row">
+        <input class="tg-copylink-input" id="tgShareLinkInput" type="text" readonly value="">
+        <button class="tg-copylink-btn" id="tgShareCopyBtn">Copy</button>
+      </div>
     </div>
   </div>
 
@@ -832,17 +1189,34 @@
 (function () {
   "use strict";
 
-  const CONFIG = {
+  var CONFIG = {
     workerUrl: "http://localhost:8787",
   };
 
+  var YT_PATTERNS = [
+    /(?:youtube\.com\/watch\?.*v=|youtube\.com\/watch\/)([\w-]{11})/,
+    /youtu\.be\/([\w-]{11})/,
+    /youtube\.com\/shorts\/([\w-]{11})/,
+    /youtube\.com\/embed\/([\w-]{11})/,
+    /youtube\.com\/v\/([\w-]{11})/,
+  ];
+
+  function isYouTubeUrl(url) {
+    if (!url) return false;
+    return YT_PATTERNS.some(function (p) { return p.test(url); });
+  }
+
   var state = {
     step: "idle",
+    mode: "insert_me",
     videoData: null,
     userPhoto: null,
     customText: "",
     resultUrl: null,
-    error: null
+    overlayText: null,
+    textStyle: null,
+    finalImageUrl: null,
+    error: null,
   };
 
   var $ = function (id) { return document.getElementById(id); };
@@ -855,14 +1229,17 @@
     generating:   $("tgGenerating"),
     urlInput:     $("tgUrlInput"),
     analyzeBtn:   $("tgAnalyzeBtn"),
-    analyzeLbl:   $("tgAnalyzeBtnLabel"),
     step1Error:   $("tgStep1Error"),
     step1ErrTxt:  $("tgStep1ErrorText"),
     step1Retry:   $("tgStep1Retry"),
     videoThumb2:  $("tgVideoThumb2"),
     videoTitle2:  $("tgVideoTitle2"),
     videoAuthor2: $("tgVideoAuthor2"),
+    modeInsert:   $("tgModeInsert"),
+    modeStyle:    $("tgModeStyle"),
     dropzone:     $("tgDropzone"),
+    dropzoneText: $("tgDropzoneText"),
+    tooltipText:  $("tgPhotoTooltipText"),
     fileInput:    $("tgFileInput"),
     photoPreview: $("tgPhotoPreview"),
     photoImg:     $("tgPhotoImg"),
@@ -875,34 +1252,42 @@
     step2Retry:   $("tgStep2Retry"),
     resultImg:    $("tgResultImg"),
     downloadBtn:  $("tgDownloadBtn"),
-    copyLinkBtn:  $("tgCopyLinkBtn"),
+    copyImageBtn: $("tgCopyImageBtn"),
     regenerateBtn:$("tgRegenerateBtn"),
-    startOverBtn: $("tgStartOverBtn"),
-    toast:        $("tgToast")
+    shareBtn:     $("tgShareBtn"),
+    shareOverlay: $("tgShareOverlay"),
+    shareClose:   $("tgShareClose"),
+    sharePreview: $("tgSharePreview"),
+    shareLinkInput:$("tgShareLinkInput"),
+    shareCopyBtn: $("tgShareCopyBtn"),
+    shareX:       $("tgShareX"),
+    shareFb:      $("tgShareFb"),
+    shareTg:      $("tgShareTg"),
+    shareWa:      $("tgShareWa"),
+    toast:        $("tgToast"),
   };
 
   var allSteps = [els.step1, els.step2, els.step3, els.loading, els.generating];
 
   function showStep(el) {
-    allSteps.forEach(function (s) {
-      s.classList.remove("active", "visible");
-    });
+    allSteps.forEach(function (s) { s.classList.remove("active", "visible"); });
     el.classList.add("active");
     requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        el.classList.add("visible");
-      });
+      requestAnimationFrame(function () { el.classList.add("visible"); });
     });
   }
 
+  var ERROR_MESSAGES = {
+    "Invalid YouTube URL": "Please enter a valid YouTube video link.",
+    "Video not found or private": "This video is private or unavailable. Try another one.",
+  };
+
   function showError(box, txtEl, message) {
-    txtEl.textContent = message;
+    txtEl.textContent = ERROR_MESSAGES[message] || message;
     box.classList.add("show");
   }
 
-  function hideError(box) {
-    box.classList.remove("show");
-  }
+  function hideError(box) { box.classList.remove("show"); }
 
   function toast(msg) {
     els.toast.textContent = msg;
@@ -916,13 +1301,18 @@
     els.videoAuthor2.textContent = data.author;
   }
 
-  function convertToBase64(file) {
-    return new Promise(function (resolve, reject) {
-      var reader = new FileReader();
-      reader.onload = function () { resolve(reader.result); };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
+  function setMode(mode) {
+    state.mode = mode;
+    els.modeInsert.classList.toggle("active", mode === "insert_me");
+    els.modeStyle.classList.toggle("active", mode === "style_ref");
+    if (mode === "insert_me") {
+      els.dropzoneText.textContent = "Click or drag your portrait photo here";
+      els.tooltipText.textContent = "Upload your portrait photo. AI will preserve your likeness in the thumbnail.";
+    } else {
+      els.dropzoneText.textContent = "Click or drag a reference thumbnail here";
+      els.tooltipText.textContent = "Upload a thumbnail you like. AI will generate a new one in a similar style.";
+    }
+    removePhoto();
   }
 
   function handlePhoto(file) {
@@ -941,22 +1331,47 @@
     els.fileInput.value = "";
   }
 
-  /* ─── Step 1: Analyze ─── */
+  function resizeForUpload(file, maxDim) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () {
+        var w = img.naturalWidth, h = img.naturalHeight;
+        if (w <= maxDim && h <= maxDim) {
+          var reader = new FileReader();
+          reader.onload = function () { resolve(reader.result); };
+          reader.readAsDataURL(file);
+          return;
+        }
+        var ratio = Math.min(maxDim / w, maxDim / h);
+        var canvas = document.createElement("canvas");
+        canvas.width = Math.round(w * ratio);
+        canvas.height = Math.round(h * ratio);
+        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.9));
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  }
 
   async function analyzeVideo() {
     var url = els.urlInput.value.trim();
-    if (!url) {
-      showError(els.step1Error, els.step1ErrTxt, "Please paste a YouTube URL.");
+    if (!url || !isYouTubeUrl(url)) {
+      showError(els.step1Error, els.step1ErrTxt, "Please enter a valid YouTube video link.");
       return;
     }
-
     hideError(els.step1Error);
     state.step = "loading_video";
     els.analyzeBtn.disabled = true;
     showStep(els.loading);
 
     try {
-      var data = await window.YouTubeParser.fetchVideoData(url);
+      var res = await fetch(CONFIG.workerUrl + "/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: url }),
+      });
+      var data = await res.json();
+      if (data.error) throw new Error(data.error);
       state.videoData = data;
       state.step = "ready";
       fillVideoCard(data);
@@ -971,19 +1386,17 @@
     }
   }
 
-  /* ─── Step 2: Generate ─── */
-
-  var generatingMessages = [
-    "Analyzing video context...",
-    "Composing the scene...",
-    "Adding finishing touches..."
+  var genMessages = [
+    "Analyzing video context\u2026",
+    "Crafting the perfect prompt\u2026",
+    "Composing the scene\u2026",
+    "Adding finishing touches\u2026",
   ];
-  var generatingMsgInterval = null;
+  var genMsgInterval = null;
 
-  function startGeneratingMessages() {
+  function startGenMessages() {
     var textEl = els.generating.querySelector(".tg-loader-text");
-    textEl.textContent = "Generating your thumbnail...";
-
+    textEl.textContent = "Generating your thumbnail\u2026";
     var statusEl = els.generating.querySelector(".tg-loader-status");
     if (!statusEl) {
       statusEl = document.createElement("div");
@@ -992,21 +1405,16 @@
       statusEl.style.fontSize = "12px";
       textEl.parentNode.appendChild(statusEl);
     }
-
-    var msgIndex = 0;
-    statusEl.textContent = generatingMessages[0];
-
-    generatingMsgInterval = setInterval(function () {
-      msgIndex = (msgIndex + 1) % generatingMessages.length;
-      statusEl.textContent = generatingMessages[msgIndex];
-    }, 3000);
+    var idx = 0;
+    statusEl.textContent = genMessages[0];
+    genMsgInterval = setInterval(function () {
+      idx = (idx + 1) % genMessages.length;
+      statusEl.textContent = genMessages[idx];
+    }, 3500);
   }
 
-  function stopGeneratingMessages() {
-    if (generatingMsgInterval) {
-      clearInterval(generatingMsgInterval);
-      generatingMsgInterval = null;
-    }
+  function stopGenMessages() {
+    if (genMsgInterval) { clearInterval(genMsgInterval); genMsgInterval = null; }
   }
 
   async function generateThumbnail() {
@@ -1014,98 +1422,194 @@
     state.customText = els.customText.value.trim();
     state.step = "generating";
     showStep(els.generating);
-    startGeneratingMessages();
+    startGenMessages();
 
     try {
       var imageBase64 = null;
       if (state.userPhoto) {
-        imageBase64 = await convertToBase64(state.userPhoto);
+        imageBase64 = await resizeForUpload(state.userPhoto, 1024);
       }
 
       var body = {
+        mode: state.mode,
         image_url: imageBase64,
         video_title: state.videoData.title,
         video_description: state.videoData.description || "",
-        custom_text: state.customText || ""
+        video_thumbnail_url: state.videoData.thumbnail_url || "",
+        custom_text: state.customText || "",
       };
 
       var res = await fetch(CONFIG.workerUrl + "/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
-
       var json = await res.json();
+      if (json.error) throw new Error(json.details || json.error);
 
-      if (json.error) {
-        state.error = json.error + (json.details ? ": " + json.details : "");
-        state.step = "error";
-        stopGeneratingMessages();
-        showStep(els.step2);
-        showError(els.step2Error, els.step2ErrTxt, state.error);
-        return;
+      state.resultUrl = json.image_url;
+      state.overlayText = json.overlay_text;
+      state.textStyle = json.text_style;
+
+      if (json.overlay_text) {
+        state.finalImageUrl = await overlayTextOnImage(
+          json.image_url, json.overlay_text, json.text_style
+        );
+        uploadProcessedImage(state.finalImageUrl);
+      } else {
+        state.finalImageUrl = json.image_url;
       }
 
-      if (json.image_url) {
-        state.resultUrl = json.image_url;
-        state.step = "result";
-        stopGeneratingMessages();
-        els.resultImg.src = state.resultUrl;
-        showStep(els.step3);
-      }
+      state.step = "result";
+      stopGenMessages();
+      els.resultImg.src = state.finalImageUrl;
+      showStep(els.step3);
     } catch (err) {
       state.step = "error";
-      state.error = "Connection error. Is the worker running?";
-      stopGeneratingMessages();
+      state.error = err.message || "Generation failed. Please try again.";
+      stopGenMessages();
       showStep(els.step2);
       showError(els.step2Error, els.step2ErrTxt, state.error);
     }
   }
 
-  /* ─── Step 3 actions ─── */
+  function uploadProcessedImage(dataUri) {
+    fetch(CONFIG.workerUrl + "/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image_base64: dataUri }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.url) {
+          state.resultUrl = d.url;
+          if (els.shareLinkInput.value) els.shareLinkInput.value = d.url;
+        }
+      })
+      .catch(function () { /* keep original URL as fallback */ });
+  }
 
-  async function downloadImage(url) {
-    var blob = await fetch(url).then(function (r) { return r.blob(); });
-    var objectUrl = URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    a.href = objectUrl;
-    a.download = "thumbnail.jpg";
-    a.click();
-    URL.revokeObjectURL(objectUrl);
+  function overlayTextOnImage(imageUrl, text, style) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = function () {
+        try {
+          var canvas = document.createElement("canvas");
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          var ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+
+          var maxW = canvas.width * 0.9;
+          var fontSize = Math.floor(canvas.height * 0.12);
+          var fontFam = "'Impact','Arial Black','Haettenschweiler',sans-serif";
+          ctx.font = "900 " + fontSize + "px " + fontFam;
+
+          while (ctx.measureText(text).width > maxW && fontSize > 20) {
+            fontSize -= 2;
+            ctx.font = "900 " + fontSize + "px " + fontFam;
+          }
+
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+          var x = canvas.width / 2;
+          var pos = (style && style.position) || "bottom";
+          var y = pos === "top" ? fontSize * 1.5
+                : pos === "center" ? canvas.height / 2
+                : canvas.height - fontSize * 1.5;
+
+          ctx.shadowColor = "rgba(0,0,0,0.7)";
+          ctx.shadowBlur = fontSize * 0.15;
+          ctx.shadowOffsetX = 2;
+          ctx.shadowOffsetY = 2;
+
+          ctx.strokeStyle = (style && style.stroke_color) || "#000000";
+          ctx.lineWidth = fontSize * 0.08;
+          ctx.lineJoin = "round";
+          ctx.strokeText(text, x, y);
+
+          ctx.shadowColor = "transparent";
+          ctx.fillStyle = (style && style.color) || "#FFFFFF";
+          ctx.fillText(text, x, y);
+
+          resolve(canvas.toDataURL("image/jpeg", 0.95));
+        } catch (e) {
+          resolve(imageUrl);
+        }
+      };
+      img.onerror = function () { resolve(imageUrl); };
+      img.src = imageUrl;
+    });
   }
 
   function downloadResult() {
-    if (!state.resultUrl) return;
-    downloadImage(state.resultUrl);
-  }
-
-  function copyLink() {
-    if (!state.resultUrl) return;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(state.resultUrl).then(function () {
-        toast("Link copied!");
-      });
+    var url = state.finalImageUrl;
+    if (!url) return;
+    if (url.startsWith("data:")) {
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "thumbnail.jpg";
+      a.click();
     } else {
-      var ta = document.createElement("textarea");
-      ta.value = state.resultUrl;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      toast("Link copied!");
+      fetch(url)
+        .then(function (r) { return r.blob(); })
+        .then(function (blob) {
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "thumbnail.jpg";
+          a.click();
+          URL.revokeObjectURL(a.href);
+        });
     }
   }
 
+  async function copyImage() {
+    var url = state.finalImageUrl;
+    if (!url) return;
+    try {
+      var res = await fetch(url);
+      var blob = await res.blob();
+      var pngBlob = blob;
+      if (blob.type !== "image/png") {
+        var cvs = document.createElement("canvas");
+        var im = new Image();
+        im.crossOrigin = "anonymous";
+        await new Promise(function (ok, fail) { im.onload = ok; im.onerror = fail; im.src = url; });
+        cvs.width = im.naturalWidth;
+        cvs.height = im.naturalHeight;
+        cvs.getContext("2d").drawImage(im, 0, 0);
+        pngBlob = await new Promise(function (ok) { cvs.toBlob(ok, "image/png"); });
+      }
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": pngBlob })]);
+      toast("Image copied!");
+    } catch (e) {
+      toast("Could not copy image");
+    }
+  }
+
+  function openShareModal() {
+    var rawUrl = state.resultUrl;
+    if (!rawUrl) return;
+    els.sharePreview.src = state.finalImageUrl || rawUrl;
+    els.shareLinkInput.value = rawUrl;
+    var enc = encodeURIComponent(rawUrl);
+    var txt = encodeURIComponent("Check out my AI thumbnail!");
+    els.shareX.href  = "https://twitter.com/intent/tweet?text=" + txt + "&url=" + enc;
+    els.shareFb.href = "https://www.facebook.com/sharer/sharer.php?u=" + enc;
+    els.shareTg.href = "https://t.me/share/url?url=" + enc + "&text=" + txt;
+    els.shareWa.href = "https://wa.me/?text=" + txt + "+" + enc;
+    els.shareOverlay.classList.add("open");
+  }
+
+  function closeShareModal() { els.shareOverlay.classList.remove("open"); }
+
   function startOver() {
     state = {
-      step: "idle",
-      videoData: null,
-      userPhoto: null,
-      customText: "",
-      resultUrl: null,
-      error: null
+      step: "idle", mode: state.mode, videoData: null,
+      userPhoto: null, customText: "", resultUrl: null,
+      overlayText: null, textStyle: null, finalImageUrl: null, error: null,
     };
     els.urlInput.value = "";
     els.customText.value = "";
@@ -1115,67 +1619,56 @@
     showStep(els.step1);
   }
 
-  /* ─── Event listeners ─── */
-
   els.analyzeBtn.addEventListener("click", analyzeVideo);
+  els.urlInput.addEventListener("keydown", function (e) { if (e.key === "Enter") analyzeVideo(); });
+  els.step1Retry.addEventListener("click", function () { hideError(els.step1Error); });
+  els.backToStep1.addEventListener("click", function () { state.step = "idle"; showStep(els.step1); });
 
-  els.urlInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") analyzeVideo();
-  });
+  els.modeInsert.addEventListener("click", function () { setMode("insert_me"); });
+  els.modeStyle.addEventListener("click", function () { setMode("style_ref"); });
 
-  els.step1Retry.addEventListener("click", function () {
-    hideError(els.step1Error);
-  });
-
-  els.backToStep1.addEventListener("click", function () {
-    state.step = "idle";
-    showStep(els.step1);
-  });
-
-  els.dropzone.addEventListener("click", function () {
-    els.fileInput.click();
-  });
-
+  els.dropzone.addEventListener("click", function () { els.fileInput.click(); });
   els.fileInput.addEventListener("change", function () {
     if (this.files && this.files[0]) handlePhoto(this.files[0]);
   });
-
-  els.dropzone.addEventListener("dragover", function (e) {
-    e.preventDefault();
-    this.classList.add("dragover");
-  });
-
-  els.dropzone.addEventListener("dragleave", function () {
-    this.classList.remove("dragover");
-  });
-
+  els.dropzone.addEventListener("dragover", function (e) { e.preventDefault(); this.classList.add("dragover"); });
+  els.dropzone.addEventListener("dragleave", function () { this.classList.remove("dragover"); });
   els.dropzone.addEventListener("drop", function (e) {
-    e.preventDefault();
-    this.classList.remove("dragover");
-    var files = e.dataTransfer && e.dataTransfer.files;
-    if (files && files[0]) handlePhoto(files[0]);
+    e.preventDefault(); this.classList.remove("dragover");
+    var f = e.dataTransfer && e.dataTransfer.files;
+    if (f && f[0]) handlePhoto(f[0]);
   });
-
   els.photoRemove.addEventListener("click", removePhoto);
 
   els.generateBtn.addEventListener("click", generateThumbnail);
-
-  els.step2Retry.addEventListener("click", function () {
-    hideError(els.step2Error);
-  });
+  els.step2Retry.addEventListener("click", function () { hideError(els.step2Error); });
 
   els.downloadBtn.addEventListener("click", downloadResult);
-  els.copyLinkBtn.addEventListener("click", copyLink);
+  els.copyImageBtn.addEventListener("click", copyImage);
+  els.regenerateBtn.addEventListener("click", generateThumbnail);
 
-  els.regenerateBtn.addEventListener("click", function () {
-    state.step = "ready";
-    showStep(els.step2);
+  els.shareBtn.addEventListener("click", openShareModal);
+  els.shareClose.addEventListener("click", closeShareModal);
+  els.shareOverlay.addEventListener("click", function (e) { if (e.target === els.shareOverlay) closeShareModal(); });
+  els.shareCopyBtn.addEventListener("click", function () {
+    var url = els.shareLinkInput.value;
+    if (!url) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function () { toast("Link copied!"); });
+    } else {
+      els.shareLinkInput.select();
+      document.execCommand("copy");
+      toast("Link copied!");
+    }
   });
 
-  els.startOverBtn.addEventListener("click", startOver);
+  if ($("tgStartOverBtn")) $("tgStartOverBtn").addEventListener("click", startOver);
+  if ($("tgCopyLinkBtn")) $("tgCopyLinkBtn").addEventListener("click", function () {
+    if (state.resultUrl) navigator.clipboard.writeText(state.resultUrl).then(function () { toast("Link copied!"); });
+  });
 
-  /* ─── Init ─── */
   showStep(els.step1);
-
 })();
+
 </script>
+

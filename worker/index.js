@@ -1,213 +1,357 @@
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Headers': 'Content-Type',
   'Access-Control-Max-Age': '86400',
 };
 
-const FAL_BASE_URL = 'https://queue.fal.run/fal-ai/flux/dev';
-const POLL_INTERVAL_MS = 2000;
-const TIMEOUT_MS = 60000;
-const IMAGE_WIDTH = 1280;
-const IMAGE_HEIGHT = 720;
+const YOUTUBE_PATTERNS = [
+  /(?:youtube\.com\/watch\?.*v=|youtube\.com\/watch\/)([\w-]{11})/,
+  /youtu\.be\/([\w-]{11})/,
+  /youtube\.com\/shorts\/([\w-]{11})/,
+  /youtube\.com\/embed\/([\w-]{11})/,
+  /youtube\.com\/v\/([\w-]{11})/,
+];
 
-const STOP_WORDS = new Set([
-  'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
-  'of', 'with', 'by', 'from', 'is', 'are', 'was', 'were', 'be', 'been',
-  'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would',
-  'could', 'should', 'may', 'might', 'shall', 'can', 'it', 'its', 'this',
-  'that', 'these', 'those', 'i', 'you', 'he', 'she', 'we', 'they', 'me',
-  'him', 'her', 'us', 'them', 'my', 'your', 'his', 'our', 'their', 'not',
-  'no', 'so', 'if', 'as', 'just', 'about', 'up', 'out', 'into', 'than',
-  'then', 'also', 'very', 'how', 'what', 'when', 'where', 'who', 'which',
-]);
+const FAL_QUEUE = 'https://queue.fal.run';
+const FAL_SYNC = 'https://fal.run';
+const POLL_INTERVAL = 2000;
+const TIMEOUT = 120_000;
 
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
     }
-
-    const url = new URL(request.url);
-
-    if (url.pathname === '/generate' && request.method === 'POST') {
-      return handleGenerate(request, env);
-    }
-
-    return jsonResponse({ error: 'Not found' }, 404);
+    const { pathname } = new URL(request.url);
+    if (pathname === '/analyze' && request.method === 'POST') return handleAnalyze(request);
+    if (pathname === '/generate' && request.method === 'POST') return handleGenerate(request, env);
+    if (pathname === '/upload' && request.method === 'POST') return handleUpload(request, env);
+    return json({ error: 'Not found' }, 404);
   },
 };
 
-async function handleGenerate(request, env) {
-  if (!env.FAL_KEY) {
-    return jsonResponse({ error: 'Server misconfigured', details: 'FAL_KEY is not set' }, 500);
+function extractVideoId(url) {
+  if (!url) return null;
+  for (const p of YOUTUBE_PATTERNS) {
+    const m = url.match(p);
+    if (m) return m[1];
   }
+  return null;
+}
+
+function htmlDecode(s) {
+  return s
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'");
+}
+
+async function handleAnalyze(request) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON' }, 400);
+  }
+
+  const videoId = extractVideoId(body.url);
+  if (!videoId) return json({ error: 'Invalid YouTube URL' }, 400);
+
+  const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(
+    'https://www.youtube.com/watch?v=' + videoId
+  )}&format=json`;
+
+  let title = '', author = '', thumb = '';
+  try {
+    const r = await fetch(oembedUrl);
+    if (!r.ok) return json({ error: 'Video not found or private' }, 404);
+    const d = await r.json();
+    title = d.title || '';
+    author = d.author_name || '';
+    thumb = (d.thumbnail_url || '').replace(/\/hqdefault\.jpg/, '/maxresdefault.jpg');
+  } catch {
+    return json({ error: 'Could not fetch video data' }, 502);
+  }
+
+  let description = '';
+  try {
+    const r = await fetch('https://www.youtube.com/watch?v=' + videoId, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Accept-Language': 'en',
+      },
+    });
+    if (r.ok) {
+      const html = await r.text();
+      const m =
+        html.match(/<meta\s+property="og:description"\s+content="([^"]*)"/) ||
+        html.match(/<meta\s+name="description"\s+content="([^"]*)"/);
+      if (m) description = htmlDecode(m[1]);
+    }
+  } catch { /* description stays empty */ }
+
+  return json({ id: videoId, title, author, description, thumbnail_url: thumb });
+}
+
+async function handleUpload(request, env) {
+  if (!env.FAL_KEY) return json({ error: 'FAL_KEY not configured' }, 500);
 
   let body;
   try {
     body = await request.json();
   } catch {
-    return jsonResponse({ error: 'Invalid JSON', details: 'Request body must be valid JSON' }, 400);
+    return json({ error: 'Invalid JSON' }, 400);
   }
 
-  const { image_url, video_title, video_description, custom_text } = body;
-
-  if (!video_title && !custom_text) {
-    return jsonResponse(
-      { error: 'Bad request', details: 'At least video_title or custom_text is required' },
-      400,
-    );
-  }
-
-  const prompt = buildPrompt({ image_url, video_title, video_description, custom_text });
-  console.log('[thumbnail-generator] Final prompt:', prompt);
-
-  const falInput = {
-    prompt,
-    image_size: { width: IMAGE_WIDTH, height: IMAGE_HEIGHT },
-    num_images: 1,
-  };
-
-  if (image_url) {
-    falInput.image_url = image_url;
+  const { image_base64 } = body;
+  if (!image_base64 || !image_base64.startsWith('data:')) {
+    return json({ error: 'image_base64 is required (data URI)' }, 400);
   }
 
   try {
-    const submitRes = await fetch(FAL_BASE_URL, {
+    const commaIdx = image_base64.indexOf(',');
+    const header = image_base64.slice(0, commaIdx);
+    const contentType = header.match(/data:([^;]+)/)?.[1] || 'image/jpeg';
+    const b64 = image_base64.slice(commaIdx + 1);
+    const binary = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+    const initRes = await fetch('https://rest.alpha.fal.ai/storage/upload/initiate', {
       method: 'POST',
       headers: {
         Authorization: `Key ${env.FAL_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(falInput),
+      body: JSON.stringify({
+        content_type: contentType,
+        file_name: 'thumbnail.jpg',
+      }),
     });
 
-    if (!submitRes.ok) {
-      const errText = await submitRes.text();
-      return jsonResponse(
-        { error: 'fal.ai submission failed', details: errText },
-        submitRes.status,
-      );
+    if (!initRes.ok) {
+      const errText = await initRes.text();
+      console.error('[upload] initiate failed:', initRes.status, errText);
+      return json({ error: 'Upload initiation failed' }, 502);
     }
 
-    const submitData = await submitRes.json();
+    const { upload_url, file_url } = await initRes.json();
 
-    if (submitData.images && submitData.images.length > 0) {
-      return jsonResponse({ image_url: submitData.images[0].url });
+    const putRes = await fetch(upload_url, {
+      method: 'PUT',
+      headers: { 'Content-Type': contentType },
+      body: binary,
+    });
+
+    if (!putRes.ok) {
+      console.error('[upload] PUT failed:', putRes.status);
+      return json({ error: 'File upload failed' }, 502);
     }
 
-    if (!submitData.request_id) {
-      return jsonResponse(
-        { error: 'Unexpected fal.ai response', details: 'No request_id or images returned' },
-        502,
-      );
-    }
-
-    const resultUrl = `${FAL_BASE_URL}/requests/${submitData.request_id}`;
-    const statusUrl = `${resultUrl}/status`;
-    const deadline = Date.now() + TIMEOUT_MS;
-
-    while (Date.now() < deadline) {
-      await sleep(POLL_INTERVAL_MS);
-
-      const statusRes = await fetch(statusUrl, {
-        headers: { Authorization: `Key ${env.FAL_KEY}` },
-      });
-
-      if (!statusRes.ok) {
-        const errText = await statusRes.text();
-        return jsonResponse(
-          { error: 'fal.ai status check failed', details: errText },
-          statusRes.status,
-        );
-      }
-
-      const statusData = await statusRes.json();
-      console.log('[thumbnail-generator] Poll status:', statusData.status);
-
-      if (statusData.status === 'COMPLETED') {
-        const resultRes = await fetch(resultUrl, {
-          headers: { Authorization: `Key ${env.FAL_KEY}` },
-        });
-
-        if (!resultRes.ok) {
-          const errText = await resultRes.text();
-          return jsonResponse(
-            { error: 'fal.ai result fetch failed', details: errText },
-            resultRes.status,
-          );
-        }
-
-        const resultData = await resultRes.json();
-
-        if (resultData.images && resultData.images.length > 0) {
-          return jsonResponse({ image_url: resultData.images[0].url });
-        }
-
-        return jsonResponse(
-          { error: 'No images in result', details: JSON.stringify(resultData) },
-          502,
-        );
-      }
-
-      if (statusData.status === 'FAILED') {
-        return jsonResponse(
-          { error: 'Generation failed', details: statusData.error || 'Unknown fal.ai error' },
-          502,
-        );
-      }
-    }
-
-    return jsonResponse({ error: 'Timeout', details: 'Generation took longer than 60 seconds' }, 504);
+    return json({ url: file_url });
   } catch (err) {
-    return jsonResponse({ error: 'Internal error', details: err.message }, 500);
+    console.error('[upload] Error:', err);
+    return json({ error: 'Upload failed', details: err.message }, 500);
   }
 }
 
-function buildPrompt({ image_url, video_title, video_description, custom_text }) {
-  const parts = [
-    'YouTube thumbnail, 16:9 aspect ratio, bold text overlay,',
-    'dramatic lighting, high contrast, vibrant colors,',
-    'professional thumbnail style, photorealistic',
-  ];
+async function handleGenerate(request, env) {
+  if (!env.FAL_KEY) return json({ error: 'FAL_KEY not configured' }, 500);
 
-  if (video_title) {
-    parts.push(`theme: ${video_title}`);
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON' }, 400);
   }
 
-  if (video_description) {
-    const keywords = extractKeywords(video_description);
-    if (keywords.length > 0) {
-      parts.push(`context: ${keywords.join(', ')}`);
+  const {
+    mode = 'insert_me',
+    image_url,
+    video_title,
+    video_description,
+    video_thumbnail_url,
+    custom_text,
+  } = body;
+
+  if (!video_title) return json({ error: 'video_title is required' }, 400);
+
+  try {
+    const llm = await craftPrompt(env, {
+      mode,
+      video_title,
+      video_description,
+      custom_text,
+      hasImage: !!image_url,
+    });
+    console.log('[gen] LLM:', JSON.stringify(llm));
+
+    let result;
+
+    if (image_url && mode === 'insert_me') {
+      result = await falQueue(env, 'fal-ai/pulid', {
+        prompt: llm.image_prompt,
+        reference_images: [{ image_url: image_url }],
+        image_size: { width: 1280, height: 720 },
+        num_images: 1,
+        num_inference_steps: 4,
+        guidance_scale: 1.2,
+        id_scale: 0.8,
+      });
+    } else if (image_url && mode === 'style_ref') {
+      result = await falQueue(env, 'fal-ai/flux/dev/image-to-image', {
+        prompt: llm.image_prompt,
+        image_url,
+        image_size: { width: 1280, height: 720 },
+        strength: 0.7,
+        num_inference_steps: 28,
+        guidance_scale: 3.5,
+        num_images: 1,
+      });
+    } else {
+      result = await falQueue(env, 'fal-ai/flux/dev', {
+        prompt: llm.image_prompt,
+        image_size: { width: 1280, height: 720 },
+        num_inference_steps: 28,
+        guidance_scale: 3.5,
+        num_images: 1,
+      });
     }
-  }
 
-  if (custom_text) {
-    parts.push(`text on thumbnail: '${custom_text}'`);
-  } else if (video_title) {
-    const autoText = video_title.split(/\s+/).slice(0, 6).join(' ').toUpperCase();
-    parts.push(`text on thumbnail: '${autoText}'`);
-  }
+    if (!result.images?.length) return json({ error: 'No images generated' }, 502);
 
-  if (image_url) {
-    parts.push(
-      'person from the reference photo, face clearly visible, same person as in reference',
-    );
+    return json({
+      image_url: result.images[0].url,
+      overlay_text: llm.overlay_text ?? null,
+      text_style: {
+        position: llm.text_position || 'bottom',
+        color: llm.text_color || '#FFFFFF',
+        stroke_color: llm.text_stroke_color || '#000000',
+      },
+    });
+  } catch (err) {
+    console.error('[gen] Error:', err);
+    return json({ error: 'Generation failed', details: err.message }, 500);
   }
-
-  return parts.join('. ');
 }
 
-function extractKeywords(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^a-zа-яё0-9\s]/gi, ' ')
-    .split(/\s+/)
-    .filter((w) => w.length > 2 && !STOP_WORDS.has(w))
-    .slice(0, 10);
+const LLM_SYSTEM = `You are an expert YouTube thumbnail designer and AI image-prompt engineer.
+Given video context you must produce:
+1. A detailed image-generation prompt for a stunning YouTube thumbnail.
+2. Short overlay text (or decide that no text is better).
+
+RULES
+- Image prompt: describe scene, lighting (dramatic), colours (vibrant, high-contrast), composition, mood.
+  Do NOT mention any text or typography in the image prompt — text is added separately.
+- Overlay text: 2-5 words max, punchy, attention-grabbing. If the user supplied custom_text, use it exactly.
+  If none supplied, generate one OR return null when the image is stronger without text.
+- If mode is "insert_me": describe a scene with one prominent person (face will be preserved from reference photo). Include pose, expression, placement details.
+- If mode is "style_ref": describe a fresh scene matching the video topic; the reference image provides style/mood.
+- Aspect ratio 16:9, 1280x720.
+
+Reply with ONLY valid JSON, no markdown fences, no extra text:
+{"image_prompt":"...","overlay_text":"TEXT or null","text_position":"top|center|bottom","text_color":"#FFFFFF","text_stroke_color":"#000000"}`;
+
+async function craftPrompt(env, { mode, video_title, video_description, custom_text, hasImage }) {
+  const user = [
+    `Video title: "${video_title}"`,
+    `Description: "${video_description || '(not available)'}"`,
+    `Mode: ${mode}`,
+    `Custom text: ${custom_text || '(none — auto-generate or decide no text)'}`,
+    `Has reference image: ${hasImage ? 'yes' : 'no'}`,
+  ].join('\n');
+
+  try {
+    const r = await fetch(`${FAL_SYNC}/fal-ai/any-llm`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Key ${env.FAL_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash',
+        system_prompt: LLM_SYSTEM,
+        prompt: user,
+        temperature: 0.7,
+        max_tokens: 400,
+      }),
+    });
+    if (!r.ok) throw new Error(`LLM ${r.status}`);
+    const d = await r.json();
+    const m = (d.output || '').match(/\{[\s\S]*\}/);
+    if (m) return JSON.parse(m[0]);
+  } catch (e) {
+    console.warn('[gen] LLM fallback:', e.message);
+  }
+
+  return {
+    image_prompt: `Professional YouTube thumbnail, dramatic cinematic lighting, vibrant saturated colours, high contrast, ${
+      mode === 'insert_me' && hasImage
+        ? 'a confident person looking at camera with expressive face, '
+        : ''
+    }dynamic composition, topic: ${video_title}`,
+    overlay_text: custom_text || video_title.split(/\s+/).slice(0, 4).join(' ').toUpperCase(),
+    text_position: 'bottom',
+    text_color: '#FFFFFF',
+    text_stroke_color: '#000000',
+  };
 }
 
-function jsonResponse(data, status = 200) {
+async function falQueue(env, model, input) {
+  const logInput = { ...input };
+  if (logInput.image_url) logInput.image_url = logInput.image_url.slice(0, 60) + '...';
+  if (logInput.reference_images) logInput.reference_images = logInput.reference_images.map(i => ({ image_url: (i.image_url || '').slice(0, 60) + '...' }));
+  console.log(`[gen] submit ${model}:`, JSON.stringify(logInput));
+
+  const sub = await fetch(`${FAL_QUEUE}/${model}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Key ${env.FAL_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(input),
+  });
+  if (!sub.ok) {
+    const errBody = await sub.text();
+    console.error(`[gen] submit ${model} ${sub.status}:`, errBody);
+    throw new Error(`fal submit ${sub.status}: ${errBody.slice(0, 300)}`);
+  }
+
+  const { status_url, response_url } = await sub.json();
+  if (!status_url || !response_url) throw new Error('fal.ai missing queue URLs');
+
+  const deadline = Date.now() + TIMEOUT;
+  while (Date.now() < deadline) {
+    await sleep(POLL_INTERVAL);
+    const sr = await fetch(status_url, {
+      headers: { Authorization: `Key ${env.FAL_KEY}` },
+    });
+    if (!sr.ok) continue;
+    const sd = await sr.json();
+    console.log(`[gen] ${model}:`, sd.status);
+    if (sd.status === 'COMPLETED') {
+      const rr = await fetch(response_url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Key ${env.FAL_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!rr.ok) {
+        const errBody = await rr.text();
+        console.error(`[gen] result fetch ${rr.status}:`, errBody);
+        throw new Error(`fal result ${rr.status}: ${errBody.slice(0, 200)}`);
+      }
+      return rr.json();
+    }
+    if (sd.status === 'FAILED') throw new Error(sd.error || 'Generation failed');
+  }
+  throw new Error('Timeout — generation exceeded 2 minutes');
+}
+
+function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
@@ -215,5 +359,5 @@ function jsonResponse(data, status = 200) {
 }
 
 function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((r) => setTimeout(r, ms));
 }
